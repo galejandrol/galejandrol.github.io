@@ -1,0 +1,15 @@
+.login {
+    width: 350px;
+}
+
+.login > mat-form-field {
+    width: 100%;
+}
+
+.login > form > mat-form-field {
+    width: 100%;
+}
+
+#loginForm {
+    display: none;
+}
