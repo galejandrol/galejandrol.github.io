@@ -1,0 +1,23 @@
+<div class="example-container" style="align-items: center;">
+  <mat-toolbar class="toolbar">
+    <span>Shaman Metrics APP</span>
+    <div class="spacer"></div>
+    <p>{{ usuario['nombre'] }}</p>
+    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+      <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+          <button mat-menu-item (click)="cerrarSesion()">
+          <mat-icon>logout</mat-icon>
+          <span>Cerrar sesion</span>
+          </button>
+      </mat-menu>
+  </mat-toolbar>
+  <div style="width: 80%;">
+    <mat-card *ngFor="let modulo of modulos" class="example-card" style="text-align: center; height: 200px; margin: 20px 0 20px 0;">
+        <mat-card-content>
+          <p>{{ modulo['descripcion'] }}</p>
+        </mat-card-content>
+    </mat-card>
+</div>
+</div>

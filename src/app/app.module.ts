@@ -3,11 +3,13 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { LoginComponent } from './login/login.component';
-import { HomeComponent } from './home/home.component';
+import { LoginComponent } from './components/login/login.component';
+import { HomeComponent } from './components/home/home.component';
 
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+
+import { HttpClientModule } from '@angular/common/http';
 
 import { FormsModule } from "@angular/forms";
 import { MatSelectModule } from '@angular/material/select';
@@ -24,14 +26,17 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
-import { ModuloComponent } from './modulo/modulo.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
+
+import { MatCheckboxModule } from '@angular/material/checkbox';
+
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     HomeComponent,
-    ModuloComponent,
+    NavbarComponent,
   ],
   imports: [
     BrowserModule,
@@ -50,6 +55,8 @@ import { ModuloComponent } from './modulo/modulo.component';
     MatToolbarModule,
     MatSidenavModule,
     MatListModule,
+    HttpClientModule,
+    MatCheckboxModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
       // Register the ServiceWorker as soon as the application is stable
