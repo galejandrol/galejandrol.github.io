@@ -9,26 +9,24 @@ import { Licencia } from 'src/app/models/licencia.model';
 })
 export class LicenciaService {
   private aliasApiURL: string = 'https://localhost:6001/api/v1/Licenses/Alias';
-  private licencia: Licencia;
 
-  constructor(private http: HttpClient) { 
-    this.licencia = new Licencia();
-  }
+  constructor(private http: HttpClient) {}
 
   obtenerTodosLosAlias(): Observable<string[]>{
     return this.http.get<string[]>(this.aliasApiURL);
   }
 
   validarAlias(alias: string): Observable<Licencia>{
-    return this.http.get<Licencia>(`${this.aliasApiURL}/${alias}/validation`);
+    const validarAliasUrl = `${this.aliasApiURL}/${alias}/validation`;
+    return this.http.get<Licencia>(validarAliasUrl);
   }
 
-  guardarLicencia(licencia: Licencia){
-    this.licencia = licencia;
+  guardarAlias(alias: string){
+    localStorage.setItem('alias', alias);
   }
 
-  obtenerLicencia(): Licencia{
-    return this.licencia;
+  obtenerAlias(): string{
+    return localStorage.getItem('alias')!;
   }
 
 }

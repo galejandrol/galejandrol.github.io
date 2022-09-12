@@ -14,22 +14,13 @@ import { UsuarioService } from 'src/app/services/usuario/usuario.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
+  licencia: Licencia = new Licencia();
+  alias: string = '';
+  username: string = '';
+  password: string = '';
+  connectionString: string = '';
 
-  licencia: Licencia;
-  usuario: Usuario;
-  alias: string;
-  username: string;
-  password: string;
-  recordarme: boolean;
-
-  constructor(private licenciaService: LicenciaService, private usuarioService: UsuarioService, private snackBar: MatSnackBar, private router: Router) {
-    this.recordarme = false;
-    this.alias = '';
-    this.username = '';
-    this.password = '';
-    this.licencia = new Licencia();
-    this.usuario = new Usuario();
-  }
+  constructor(private licenciaService: LicenciaService, private usuarioService: UsuarioService, private snackBar: MatSnackBar, private router: Router) {}
 
   ngOnInit(): void {
     if (this.usuarioService.usuarioLogueado()){
@@ -47,10 +38,7 @@ export class LoginComponent implements OnInit {
     this.licenciaService.validarAlias(this.alias)
       .subscribe({
         next: (licencia) => {
-
           this.licencia = licencia;
-          this.licencia.alias = this.alias;
-          this.licenciaService.guardarLicencia(licencia);
   
           let hoy = new Date();
           let fechaDeVencimiento = new Date(licencia.fechaDeVencimiento);
@@ -94,8 +82,8 @@ export class LoginComponent implements OnInit {
     this.usuarioService.validarCredenciales(this.licencia, this.username, this.password)
     .subscribe({
       next: (usuario) => {
-        usuario.logueado = true;
-        this.usuarioService.guardarUsuario(usuario);
+        this.licenciaService.guardarAlias(this.alias);
+        this.usuarioService.guardarNombreDeUsuario(usuario);
         this.router.navigateByUrl("/home");
       },
       error: (err) => {
@@ -111,36 +99,5 @@ export class LoginComponent implements OnInit {
       }
     })
   }
-
-/*   public async login(){
-    const body = {
-      ConnectionString: this.licencia.connectionString,
-      UserName: this.username,
-      Password: this.password
-    }
-  
-    const response = await fetch(`https://localhost:6001/api/v1/Licenses/Alias/${this.licencia.alias}/login`, {
-      method: 'POST',
-      headers: {
-          'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(body)
-    });
-
-    const result = await response.json();
-
-    if (response.ok){
-      //localStorage.setItem('user', JSON.stringify({ info: result }));
-      this.router.navigateByUrl("/home");
-
-    } else if (response.status === 401) {
-      this.snackBar.open(result['loginError'], "Cerrar", {
-        duration: 3000,
-        panelClass: ['error-snackbar']
-      });
-    } else {
-      console.error(`HTTP ERROR - [CODE: ${response.status}], [MESSAGE: ${response.statusText}]`);
-    }
-  } */
 
 }

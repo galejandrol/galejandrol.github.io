@@ -10,14 +10,16 @@ import { Observable } from 'rxjs';
 export class UsuarioService {
 
   private aliasApiURL: string = 'https://localhost:6001/api/v1/Licenses/Alias';
-  private usuario: Usuario;
 
-
-  constructor(private http: HttpClient) { 
-    this.usuario = new Usuario();
-  }
+  constructor(private http: HttpClient) {}
 
   validarCredenciales(licencia: Licencia, usuario: string, password: string): Observable<Usuario>{
+    const loginUrl = `${this.aliasApiURL}/${licencia.alias}/login`
+    const httpOptions = {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+    }
     const body = {
       ConnectionString: licencia.connectionString,
       UserName: usuario,
@@ -25,29 +27,31 @@ export class UsuarioService {
     }
 
     return this.http.post<Usuario>(
-      `${this.aliasApiURL}/${licencia.alias}/login`,
+      loginUrl,
       JSON.stringify(body),
-      {
-        headers: {
-        'Content-Type': 'application/json'
-        },
-      })
+      httpOptions)
   }
 
-  guardarUsuario(usuario: Usuario){
-    this.usuario = usuario;
+  guardarNombreDeUsuario(usuario: Usuario){
+    localStorage.setItem('usuarioActual', `{"nombreCompleto": "${usuario.nombre}"}`);
   }
 
   usuarioLogueado(): boolean{
-    return this.usuario.logueado;
+
+    if (localStorage.getItem('usuarioActual')){
+      return true;
+    }
+
+    return false;
   }
 
-  obtenerUsuario(): Usuario {
-    return this.usuario;
+  obtenerNombreDeUsuario(): string {
+    let usuarioActual = JSON.parse(localStorage.getItem('usuarioActual')!);
+    return usuarioActual.nombreCompleto;
   }
 
   cerrarSesion() {
-    this.usuario = new Usuario();
+    localStorage.clear();
   }
 
 }
