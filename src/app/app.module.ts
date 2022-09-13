@@ -29,6 +29,9 @@ import { MatListModule } from '@angular/material/list';
 import { NavbarComponent } from './components/navbar/navbar.component';
 
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { ModuloDetailComponent } from './components/modulo-detail/modulo-detail.component';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { FiltroComponent } from './components/filtro/filtro.component';
 
 
 @NgModule({
@@ -37,6 +40,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     LoginComponent,
     HomeComponent,
     NavbarComponent,
+    ModuloDetailComponent,
+    FiltroComponent,
   ],
   imports: [
     BrowserModule,
@@ -57,6 +62,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     MatListModule,
     HttpClientModule,
     MatCheckboxModule,
+    MatExpansionModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
       // Register the ServiceWorker as soon as the application is stable

@@ -6,6 +6,24 @@ import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import { ModuloService } from 'src/app/services/modulo/modulo.service';
 import { Modulo } from 'src/app/models/modulo.model';
 
+interface Cliente {
+  value: string;
+  viewValue: string;
+}
+
+interface Rubros {
+  value: string;
+  viewValue: string;
+}
+interface Zonas {
+  value: string;
+  viewValue: string;
+}
+interface Clasificaciones {
+  value: string;
+  viewValue: string;
+}
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -13,21 +31,35 @@ import { Modulo } from 'src/app/models/modulo.model';
 })
 export class HomeComponent implements OnInit {
 
-  mobileQuery: MediaQueryList;
+  clientes: Cliente[] = [
+    {value: 'OSDE', viewValue: 'OSDE'},
+    {value: 'SWISS MEDICAL', viewValue: 'SWISS MEDICAL'},
+  ];
 
-  fillerNav = ['Inicio', 'Modulos'];
+  rubros: Rubros[] = [
+    {value: 'OSDE', viewValue: 'OSDE'},
+    {value: 'SWISS MEDICAL', viewValue: 'SWISS MEDICAL'},
+  ];
+
+  zonas: Zonas[] = [
+    {value: 'CABA', viewValue: 'CABA'},
+    {value: 'GBA NORTE', viewValue: 'GBA NORTE'},
+    {value: 'INTERIOR', viewValue: 'INTERIOR'},
+  ];
+
+  clasificaciones: Clasificaciones[] = [
+    {value: 'CODIGO ROJO', viewValue: 'CODIGO ROJO'},
+    {value: 'CODIGO AMARILLO', viewValue: 'CODIGO AMARILLO'},
+    {value: 'VISITA', viewValue: 'VISITA'},
+    {value: 'VISITA PRIORIZADA', viewValue: 'VISITA PRIORIZADA'},
+  ];
 
   public modulos: Array<Modulo>;
   public usuarioNombreCompleto: string = '';
   private alias: string = '';
 
-  private _mobileQueryListener: () => void;
-
   constructor(public moduloService: ModuloService, private licenciaService: LicenciaService, private usuarioService: UsuarioService, changeDetectorRef: ChangeDetectorRef, media: MediaMatcher, private router: Router) {
     this.modulos = [];
-    this.mobileQuery = media.matchMedia('(max-width: 600px)');
-    this._mobileQueryListener = () => changeDetectorRef.detectChanges();
-    this.mobileQuery.addListener(this._mobileQueryListener);
   }
 
   ngOnInit(): void {
@@ -50,6 +82,13 @@ export class HomeComponent implements OnInit {
     })
   }
 
+  mostrarDetalleDelModulo(codigo: string){
+    let modulosListDiv = document.getElementById('modulosList') as HTMLDivElement;
+    let moduloDetalleDiv = document.getElementById('moduloDetalle') as HTMLDivElement;
+    modulosListDiv.style.display = 'none';
+    moduloDetalleDiv.style.display = 'block';
+  }
+  
   cerrarSesion(){
     this.usuarioService.cerrarSesion();
     this.router.navigateByUrl('/login');

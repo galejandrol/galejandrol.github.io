@@ -88,7 +88,6 @@ export class LoginComponent implements OnInit {
       },
       error: (err) => {
         if (err.status === 401) {
-          console.log(err)
           this.snackBar.open(err.error.loginError, "Cerrar", {
             duration: 3000,
             panelClass: ['error-snackbar']
@@ -99,5 +98,4 @@ export class LoginComponent implements OnInit {
       }
     })
   }
-
 }

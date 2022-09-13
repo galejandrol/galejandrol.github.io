@@ -1,0 +1,25 @@
+<mat-accordion>
+    <mat-expansion-panel class="filtrosContainer">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Filtros
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <div *ngFor="let filtro of filtros" class="filtroContainer">
+        <mat-form-field appearance="fill" style="width: 100%;">
+          <mat-label> {{ filtro.label }}</mat-label>
+          <mat-select>
+            <mat-option *ngFor="let filtroOption of filtro.options" [value]="filtroOption.value">
+              {{ filtroOption.viewValue }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <button mat-raised-button color="green">Aplicar</button>
+    </mat-expansion-panel>
+    
+  </mat-accordion>
+  
+  <div id="moduloDetalle" style="margin: 50px 0px 0px 20px;">
+    <button mat-raised-button color="warn" (click)="mostrarListaDeModulos()">Atras</button>
+  </div>
