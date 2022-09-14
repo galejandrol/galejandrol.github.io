@@ -31,23 +31,33 @@ interface Clasificaciones {
 })
 export class HomeComponent implements OnInit {
 
+  opcionDefault: {value: string, viewValue: string} = {
+    value: "TODOS",
+    viewValue: "TODOS"
+  }
+
   clientes: Cliente[] = [
+    {value: 'a', viewValue: 'a'},
+    this.opcionDefault,
     {value: 'OSDE', viewValue: 'OSDE'},
     {value: 'SWISS MEDICAL', viewValue: 'SWISS MEDICAL'},
   ];
 
   rubros: Rubros[] = [
+    {value: 'a', viewValue: 'a'},
     {value: 'OSDE', viewValue: 'OSDE'},
     {value: 'SWISS MEDICAL', viewValue: 'SWISS MEDICAL'},
   ];
 
   zonas: Zonas[] = [
     {value: 'CABA', viewValue: 'CABA'},
+    {value: 'CABA', viewValue: 'CABA'},
     {value: 'GBA NORTE', viewValue: 'GBA NORTE'},
     {value: 'INTERIOR', viewValue: 'INTERIOR'},
   ];
 
   clasificaciones: Clasificaciones[] = [
+    this.opcionDefault,
     {value: 'CODIGO ROJO', viewValue: 'CODIGO ROJO'},
     {value: 'CODIGO AMARILLO', viewValue: 'CODIGO AMARILLO'},
     {value: 'VISITA', viewValue: 'VISITA'},
@@ -82,11 +92,11 @@ export class HomeComponent implements OnInit {
     })
   }
 
-  mostrarDetalleDelModulo(codigo: string){
+  mostrarMetricaDelModulo(codigo: string){
     let modulosListDiv = document.getElementById('modulosList') as HTMLDivElement;
-    let moduloDetalleDiv = document.getElementById('moduloDetalle') as HTMLDivElement;
+    let metricaModuloDiv = document.getElementById('metricaModulo') as HTMLDivElement;
     modulosListDiv.style.display = 'none';
-    moduloDetalleDiv.style.display = 'block';
+    metricaModuloDiv.style.display = 'block';
   }
   
   cerrarSesion(){

@@ -32,6 +32,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { ModuloDetailComponent } from './components/modulo-detail/modulo-detail.component';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { FiltroComponent } from './components/filtro/filtro.component';
+import { MetricaComponent } from './components/metrica/metrica.component';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 
 @NgModule({
@@ -42,6 +44,7 @@ import { FiltroComponent } from './components/filtro/filtro.component';
     NavbarComponent,
     ModuloDetailComponent,
     FiltroComponent,
+    MetricaComponent,
   ],
   imports: [
     BrowserModule,
@@ -63,6 +66,7 @@ import { FiltroComponent } from './components/filtro/filtro.component';
     HttpClientModule,
     MatCheckboxModule,
     MatExpansionModule,
+    NgxChartsModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
       // Register the ServiceWorker as soon as the application is stable

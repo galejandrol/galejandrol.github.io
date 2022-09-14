@@ -1,0 +1,21 @@
+<div>
+    <app-filtro></app-filtro>
+    <div>
+        <ngx-charts-bar-vertical
+        [view]="view"
+        [results]="asd"
+        [gradient]="gradient"
+        [xAxis]="showXAxis"
+        [yAxis]="showYAxis"
+        [legend]="showLegend"
+        [showXAxisLabel]="showXAxisLabel"
+        [showYAxisLabel]="showYAxisLabel"
+        [xAxisLabel]="xAxisLabel"
+        [yAxisLabel]="yAxisLabel"
+        [legendTitle]="legendTitle">
+    </ngx-charts-bar-vertical>
+    </div>
+    <div>
+        <button mat-raised-button color="warn" (click)="mostrarListaDeModulos()">Atras</button>
+    </div>
+</div>

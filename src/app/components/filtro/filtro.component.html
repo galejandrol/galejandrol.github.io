@@ -2,7 +2,7 @@
     <mat-expansion-panel class="filtrosContainer">
       <mat-expansion-panel-header>
         <mat-panel-title>
-          Filtros
+          <strong>Filtros</strong>
         </mat-panel-title>
       </mat-expansion-panel-header>
       <div *ngFor="let filtro of filtros" class="filtroContainer">
@@ -15,11 +15,6 @@
           </mat-select>
         </mat-form-field>
       </div>
-      <button mat-raised-button color="green">Aplicar</button>
+      <button mat-raised-button color="primary">Aplicar</button>
     </mat-expansion-panel>
-    
   </mat-accordion>
-  
-  <div id="moduloDetalle" style="margin: 50px 0px 0px 20px;">
-    <button mat-raised-button color="warn" (click)="mostrarListaDeModulos()">Atras</button>
-  </div>

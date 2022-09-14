@@ -14,11 +14,11 @@
       </mat-menu>
   </mat-toolbar>  
   <div id="modulosList" style="width: 80%; margin:auto;">
-    <mat-card *ngFor="let modulo of modulos" class="clickable" (click)="mostrarDetalleDelModulo(modulo['codigo'])" style="text-align: center; height: 200px; margin: 20px 0 20px 0;">
+    <mat-card *ngFor="let modulo of modulos" class="clickable" (click)="mostrarMetricaDelModulo(modulo['codigo'])" style="text-align: center; height: 200px; margin: 20px 0 20px 0;">
         <mat-card-content >
-          <p>{{ modulo['descripcion'] }}</p>
+          <p>{{ modulo.descripcion }}</p>
         </mat-card-content>
     </mat-card>
   </div>
-  <app-filtro id="moduloDetalle" style="display: none;"></app-filtro>
+  <app-metrica id="metricaModulo" style="display: none;"></app-metrica>
 </div>
