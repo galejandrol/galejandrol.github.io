@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import servicios_realizados from './servicios_realizados.json';
 
 interface ServicioRealizado {
@@ -18,22 +20,13 @@ interface ServicioRealizado {
 export class MetricaComponent implements OnInit {
 
   servicios: Array<ServicioRealizado> = servicios_realizados;
+  routeSub: Subscription = new Subscription();
+  public metricaSeleccionada: string = '';
   asd: Array<any> = [];
 
   single: any[] = [];
   multi: any[] = [];
   view: [number, number] = [700, 400];
-
-  prueba = [
-    {
-      "name": "Germany",
-      "value": 8940000
-    },
-    {
-      "name": "USA",
-      "value": 5000000
-    }
-  ]
 
   // options
   showXAxis = true;
@@ -44,15 +37,19 @@ export class MetricaComponent implements OnInit {
   xAxisLabel = 'Grado Operativo';
   showYAxisLabel = true;
   yAxisLabel = 'Cantidad';
-  legendTitle = "Referencia"
+  legendTitle = "Referencia";
 
   colorScheme = {
     domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
   };
 
-  constructor() {}
+  constructor(private router: Router, private activatedRoute: ActivatedRoute) {}
 
   ngOnInit(): void {
+    this.routeSub = this.activatedRoute.params.subscribe(params => {
+      this.metricaSeleccionada = params['id']; //log the value of id
+    });
+
     const grados = Array.from(new Set(this.servicios.map(item => item.grado)));
     grados.forEach( (grado) => {
       const gradoCantidad = this.servicios.filter((obj) => obj.grado === grado).length;
@@ -61,10 +58,11 @@ export class MetricaComponent implements OnInit {
   }
 
   mostrarListaDeModulos(){
-    let modulosListDiv = document.getElementById('modulosList') as HTMLDivElement;
+    this.router.navigateByUrl('/home');
+/*     let modulosListDiv = document.getElementById('modulosList') as HTMLDivElement;
     let metricaModuloDiv = document.getElementById('metricaModulo') as HTMLDivElement;
     metricaModuloDiv.style.display = 'none';
-    modulosListDiv.style.display = 'block';
+    modulosListDiv.style.display = 'block'; */
   }
 
 }

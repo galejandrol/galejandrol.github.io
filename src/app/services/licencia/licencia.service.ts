@@ -21,8 +21,9 @@ export class LicenciaService {
     return this.http.get<Licencia>(validarAliasUrl);
   }
 
-  guardarAlias(alias: string){
-    localStorage.setItem('alias', alias);
+  guardarLicencia(licencia: Licencia){
+    localStorage.setItem('alias', licencia.alias);
+    localStorage.setItem('aliasCnnString', licencia.connectionString);
   }
 
   obtenerAlias(): string{

@@ -6,24 +6,6 @@ import { UsuarioService } from 'src/app/services/usuario/usuario.service';
 import { ModuloService } from 'src/app/services/modulo/modulo.service';
 import { Modulo } from 'src/app/models/modulo.model';
 
-interface Cliente {
-  value: string;
-  viewValue: string;
-}
-
-interface Rubros {
-  value: string;
-  viewValue: string;
-}
-interface Zonas {
-  value: string;
-  viewValue: string;
-}
-interface Clasificaciones {
-  value: string;
-  viewValue: string;
-}
-
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -31,42 +13,10 @@ interface Clasificaciones {
 })
 export class HomeComponent implements OnInit {
 
-  opcionDefault: {value: string, viewValue: string} = {
-    value: "TODOS",
-    viewValue: "TODOS"
-  }
-
-  clientes: Cliente[] = [
-    {value: 'a', viewValue: 'a'},
-    this.opcionDefault,
-    {value: 'OSDE', viewValue: 'OSDE'},
-    {value: 'SWISS MEDICAL', viewValue: 'SWISS MEDICAL'},
-  ];
-
-  rubros: Rubros[] = [
-    {value: 'a', viewValue: 'a'},
-    {value: 'OSDE', viewValue: 'OSDE'},
-    {value: 'SWISS MEDICAL', viewValue: 'SWISS MEDICAL'},
-  ];
-
-  zonas: Zonas[] = [
-    {value: 'CABA', viewValue: 'CABA'},
-    {value: 'CABA', viewValue: 'CABA'},
-    {value: 'GBA NORTE', viewValue: 'GBA NORTE'},
-    {value: 'INTERIOR', viewValue: 'INTERIOR'},
-  ];
-
-  clasificaciones: Clasificaciones[] = [
-    this.opcionDefault,
-    {value: 'CODIGO ROJO', viewValue: 'CODIGO ROJO'},
-    {value: 'CODIGO AMARILLO', viewValue: 'CODIGO AMARILLO'},
-    {value: 'VISITA', viewValue: 'VISITA'},
-    {value: 'VISITA PRIORIZADA', viewValue: 'VISITA PRIORIZADA'},
-  ];
-
   public modulos: Array<Modulo>;
   public usuarioNombreCompleto: string = '';
   private alias: string = '';
+  public metricaSeleccionada: string = '';
 
   constructor(public moduloService: ModuloService, private licenciaService: LicenciaService, private usuarioService: UsuarioService, changeDetectorRef: ChangeDetectorRef, media: MediaMatcher, private router: Router) {
     this.modulos = [];
@@ -93,10 +43,13 @@ export class HomeComponent implements OnInit {
   }
 
   mostrarMetricaDelModulo(codigo: string){
-    let modulosListDiv = document.getElementById('modulosList') as HTMLDivElement;
+    this.router.navigateByUrl(`/modulos/${codigo}`)
+/*     let modulosListDiv = document.getElementById('modulosList') as HTMLDivElement;
     let metricaModuloDiv = document.getElementById('metricaModulo') as HTMLDivElement;
     modulosListDiv.style.display = 'none';
     metricaModuloDiv.style.display = 'block';
+    console.log(codigo)
+    this.metricaSeleccionada = codigo; */
   }
   
   cerrarSesion(){

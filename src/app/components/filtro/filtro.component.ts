@@ -1,103 +1,64 @@
-import { Component, OnInit } from '@angular/core';
-
-interface FiltroOptions {
-  value: string;
-  viewValue: string;
-}
-
-interface Filtros{
-  label: string;
-  options: Array<FiltroOptions>;
-}
+import { Component, Input, OnInit } from '@angular/core';
+import { Filtro } from 'src/app/models/filtro.model';
+import { FiltroService } from 'src/app/services/filtro/filtro.service';
 
 @Component({
   selector: 'app-filtro',
   templateUrl: './filtro.component.html',
   styleUrls: ['./filtro.component.css']
 })
+
 export class FiltroComponent implements OnInit {
 
-  filtros: Filtros[] = [
+  @Input() asd: string = '';
+
+  filtrosSeleccionados: Array<{filtro: string, value: string | number}> = [
     {
-      label: 'Clientes',
-      options: [
-        {
-          value: "TODOS",
-          viewValue: "TODOS"
-        },
-        {
-          value: "OSDE",
-          viewValue: "OSDE"
-        },
-        {
-          value: "SWISS MEDICAL",
-          viewValue: "SWISS MEDICAL"
-        },
-      ]
-    },
-    {
-      label: 'Zonas',
-      options: [
-        {
-          value: "TODAS",
-          viewValue: "TODAS"
-        },
-        {
-          value: "CABA",
-          viewValue: "CABA"
-        },
-        {
-          value: "GBA NORTE",
-          viewValue: "GBA NORTE"
-        },
-      ]
-    },
-    {
-      label: 'Grado Operativo',
-      options: [
-        {
-          value: "TODOS",
-          viewValue: "TODAS"
-        },
-        {
-          value: "CODIGO ROJO",
-          viewValue: "CODIGO ROJO"
-        },
-        {
-          value: "CODIGO AMARILLO",
-          viewValue: "CODIGO AMARILLO"
-        },
-        {
-          value: "VISITA",
-          viewValue: "VISITA"
-        },
-      ]
-    }, 
-    {
-      label: 'Fecha',
-      options: [
-        {
-          value: "HOY",
-          viewValue: "HOY"
-        },
-        {
-          value: "UNA SEMANA",
-          viewValue: "UNA SEMANA"
-        },
-        {
-          value: "UN MES",
-          viewValue: "UN MES"
-        },
-        {
-          value: "PERSONALIZADO",
-          viewValue: "PERSONALIZADO"
-        },
-      ]
-    },
+    filtro: "Cliente",
+    value: 0
+    }
   ];
 
-  constructor() { }
+  filtros: Array<Filtro> = [];
+  RubrosClientes: string = '';
+
+  constructor(private filtroService: FiltroService) { }
 
   ngOnInit(): void {
+    this.filtrosSeleccionados.push({
+      filtro: "Metrica",
+      value: this.asd
+    })
+    this.filtroService.obtenerOpcionesDeFiltros()
+    .subscribe({
+      next: (filtrosOpcionesArray) => {
+        this.filtros = filtrosOpcionesArray;
+        console.log(this.filtros)
+      },
+      error: (err) => {
+        console.error(`HTTP ERROR - [CODE: ${err.status}], [MESSAGE: ${err.statusText}]`);
+      }
+    })
+  }
+
+  aplicarFiltro(): void {
+    console.log("aplicar");
+  }
+
+  select(event: any){
+
+    let filtroNames = this.filtrosSeleccionados.map(function(a) {return a.filtro;});
+
+    if (filtroNames.includes(event.source.id)) {
+      let index = filtroNames.indexOf(event.source.id);
+      this.filtrosSeleccionados[index].value = event.value;
+    } else {
+      this.filtrosSeleccionados.push({
+        filtro: event.source.id,
+        value: event.value
+      })
+    }
+
+    console.log(this.filtrosSeleccionados);
   }
 }

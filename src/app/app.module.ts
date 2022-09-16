@@ -26,10 +26,8 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
-import { NavbarComponent } from './components/navbar/navbar.component';
 
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { ModuloDetailComponent } from './components/modulo-detail/modulo-detail.component';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { FiltroComponent } from './components/filtro/filtro.component';
 import { MetricaComponent } from './components/metrica/metrica.component';
@@ -41,8 +39,6 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     AppComponent,
     LoginComponent,
     HomeComponent,
-    NavbarComponent,
-    ModuloDetailComponent,
     FiltroComponent,
     MetricaComponent,
   ],

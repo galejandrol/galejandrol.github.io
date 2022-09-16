@@ -39,6 +39,7 @@ export class LoginComponent implements OnInit {
       .subscribe({
         next: (licencia) => {
           this.licencia = licencia;
+          this.licencia.alias = this.alias;
   
           let hoy = new Date();
           let fechaDeVencimiento = new Date(licencia.fechaDeVencimiento);
@@ -82,7 +83,7 @@ export class LoginComponent implements OnInit {
     this.usuarioService.validarCredenciales(this.licencia, this.username, this.password)
     .subscribe({
       next: (usuario) => {
-        this.licenciaService.guardarAlias(this.alias);
+        this.licenciaService.guardarLicencia(this.licencia);
         this.usuarioService.guardarNombreDeUsuario(usuario);
         this.router.navigateByUrl("/home");
       },

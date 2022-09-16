@@ -8,13 +8,16 @@
       <div *ngFor="let filtro of filtros" class="filtroContainer">
         <mat-form-field appearance="fill" style="width: 100%;">
           <mat-label> {{ filtro.label }}</mat-label>
-          <mat-select>
-            <mat-option *ngFor="let filtroOption of filtro.options" [value]="filtroOption.value">
-              {{ filtroOption.viewValue }}
+          <mat-select id="{{ filtro.name }}" (selectionChange)="select($event)">
+            <mat-option *ngFor="let filterOption of filtro.filterOptions" [value]="filterOption.id">
+              {{ filterOption.descripcion }}
             </mat-option>
           </mat-select>
         </mat-form-field>
       </div>
-      <button mat-raised-button color="primary">Aplicar</button>
+      <button mat-raised-button color="primary" (click)="aplicarFiltro()">Aplicar</button>
     </mat-expansion-panel>
   </mat-accordion>
+
+
+  <p>You selected: {{ RubrosClientes }}</p>
