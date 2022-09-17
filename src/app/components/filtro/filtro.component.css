@@ -2,10 +2,19 @@
     margin-top: 20px !important;
     margin-right: auto;
     margin-left: auto;
-    width: 90%;
+    width: 80%;
 }
 
 .filtroContainer {
-    width: 80%;
+    width: 60%;
     margin: auto;
+}
+
+#aplicarFiltros {
+    width: 60%;
+    margin: 30px auto auto auto;
+}
+
+.prueba {
+    margin-top: 15px;
 }

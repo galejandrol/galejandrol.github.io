@@ -15,9 +15,28 @@
           </mat-select>
         </mat-form-field>
       </div>
-      <button mat-raised-button color="primary" (click)="aplicarFiltro()">Aplicar</button>
+      <div *ngIf="mostrasrFiltroFechaPersonalizada" class="filtroContainer">
+        <mat-form-field appearance="fill" style="width: 100%;">
+          <mat-label>Ingrese un rango de fechas:</mat-label>
+          <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+            <input matStartDate formControlName="fechaDesde" placeholder="Desde">
+            <input matEndDate formControlName="fechaHasta" placeholder="Hasta">
+          </mat-date-range-input>
+          <mat-hint>DD/MM/YYYY – DD/MM/YYYY</mat-hint>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-date-range-picker #picker></mat-date-range-picker>
+          <mat-error *ngIf="range.controls.fechaDesde.hasError('matStartDateInvalid')">Fecha desde invalida</mat-error>
+          <mat-error *ngIf="range.controls.fechaHasta.hasError('matEndDateInvalid')">Fecha hasta invalida</mat-error>
+        </mat-form-field>
+        </div>
+      <div class="filtroContainer">
+        <mat-checkbox id="includeAnulados" (change)="select($event)" checked>Anulados</mat-checkbox>
+      </div>
+      <div class="filtroContainer">
+        <mat-checkbox id="includeNoAtendidos" (change)="select($event)" checked>No atendidos</mat-checkbox>
+      </div>
+      <div id="aplicarFiltros">
+        <button mat-raised-button color="primary" (click)="aplicarFiltro()">Aplicar</button>
+      </div>
     </mat-expansion-panel>
   </mat-accordion>
-
-
-  <p>You selected: {{ RubrosClientes }}</p>

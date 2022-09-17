@@ -21,7 +21,7 @@ export class MetricaComponent implements OnInit {
 
   servicios: Array<ServicioRealizado> = servicios_realizados;
   routeSub: Subscription = new Subscription();
-  public metricaSeleccionada: string = '';
+  public metricId: string = '';
   asd: Array<any> = [];
 
   single: any[] = [];
@@ -47,7 +47,7 @@ export class MetricaComponent implements OnInit {
 
   ngOnInit(): void {
     this.routeSub = this.activatedRoute.params.subscribe(params => {
-      this.metricaSeleccionada = params['id']; //log the value of id
+      this.metricId = params['id']; //log the value of id
     });
 
     const grados = Array.from(new Set(this.servicios.map(item => item.grado)));

@@ -11,7 +11,7 @@ import { environment } from '../environments/environment';
 
 import { HttpClientModule } from '@angular/common/http';
 
-import { FormsModule } from "@angular/forms";
+import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatSelectModule } from '@angular/material/select';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -32,6 +32,10 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { FiltroComponent } from './components/filtro/filtro.component';
 import { MetricaComponent } from './components/metrica/metrica.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule} from '@angular/material/core';
+import { MAT_DATE_LOCALE } from '@angular/material/core'
 
 
 @NgModule({
@@ -63,6 +67,9 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     MatCheckboxModule,
     MatExpansionModule,
     NgxChartsModule,
+    MatDatepickerModule,
+    ReactiveFormsModule,
+    MatNativeDateModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
       // Register the ServiceWorker as soon as the application is stable
@@ -71,7 +78,9 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
     }),
     BrowserAnimationsModule
   ],
-  providers: [],
+  providers: [
+    { provide: MAT_DATE_LOCALE, useValue: 'es-ES' }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
