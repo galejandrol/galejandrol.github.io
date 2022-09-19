@@ -1,6 +1,6 @@
 <div class="example-container">
   <mat-toolbar class="toolbar">
-    <span>Shaman Metrics APP</span>
+    <span>SHAMAN METRICS APP</span>
     <div class="spacer"></div>
     <p>{{ usuarioNombreCompleto }}</p>
     <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
@@ -13,10 +13,10 @@
           </button>
       </mat-menu>
   </mat-toolbar>  
-  <div id="modulosList" style="width: 80%; margin:auto;">
-    <mat-card *ngFor="let modulo of modulos" class="clickable" (click)="mostrarMetricaDelModulo(modulo['codigo'])" style="text-align: center; height: 200px; margin: 20px 0 20px 0;">
+  <div id="modulosList" style="width: 60%; margin:auto;">
+    <mat-card *ngFor="let modulo of modulos" class="clickable" (click)="mostrarMetricaDelModulo(modulo['codigo'])" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 200px; margin: 20px 0 20px 0;">
         <mat-card-content >
-          <p>{{ modulo.descripcion }}</p>
+          <p style="font-size: 15px; font-weight: bold;">{{ modulo.descripcion | uppercase }}</p>
         </mat-card-content>
     </mat-card>
   </div>

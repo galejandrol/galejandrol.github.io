@@ -1,15 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import servicios_realizados from './servicios_realizados.json';
-
-interface ServicioRealizado {
-  cliente: string,
-  rubro: string,
-  zona: string,
-  grado: string,
-  fecha: string
-}
 
 @Component({
   selector: 'app-metrica',
@@ -19,14 +10,29 @@ interface ServicioRealizado {
 
 export class MetricaComponent implements OnInit {
 
-  servicios: Array<ServicioRealizado> = servicios_realizados;
   routeSub: Subscription = new Subscription();
-  public metricId: string = '';
-  asd: Array<any> = [];
+  metricId: string = '';
+  metricas: Array<any> = [];  
+  customColors: Array<any> = [];
 
-  single: any[] = [];
-  multi: any[] = [];
-  view: [number, number] = [700, 400];
+  view: [number, number] = [0,0];
+
+  onResize(event: any) {
+    this.view = [event.target.innerWidth / 1.35, 400];
+  }
+
+  actualizarMetricas(metricas: any) {
+    let newMetrics: Array<any> = [];
+    let newMetricsColors: Array<any> = [];
+
+    metricas.results.forEach((element: any) => {
+      newMetrics.push({"name": element.name, "value": element.value});
+      newMetricsColors.push({"name": element.name, "value": element.color})
+    });
+
+    this.customColors = [...newMetricsColors];
+    this.metricas = [...newMetrics];
+  }
 
   // options
   showXAxis = true;
@@ -39,30 +45,18 @@ export class MetricaComponent implements OnInit {
   yAxisLabel = 'Cantidad';
   legendTitle = "Referencia";
 
-  colorScheme = {
-    domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
-  };
-
-  constructor(private router: Router, private activatedRoute: ActivatedRoute) {}
+  constructor(private router: Router, private activatedRoute: ActivatedRoute) {
+    this.view = [innerWidth / 1.3, 400];
+  }
 
   ngOnInit(): void {
     this.routeSub = this.activatedRoute.params.subscribe(params => {
-      this.metricId = params['id']; //log the value of id
+      this.metricId = params['id'];
     });
-
-    const grados = Array.from(new Set(this.servicios.map(item => item.grado)));
-    grados.forEach( (grado) => {
-      const gradoCantidad = this.servicios.filter((obj) => obj.grado === grado).length;
-      this.asd.push({"name": grado, "value": gradoCantidad})
-    })
   }
 
   mostrarListaDeModulos(){
     this.router.navigateByUrl('/home');
-/*     let modulosListDiv = document.getElementById('modulosList') as HTMLDivElement;
-    let metricaModuloDiv = document.getElementById('metricaModulo') as HTMLDivElement;
-    metricaModuloDiv.style.display = 'none';
-    modulosListDiv.style.display = 'block'; */
   }
 
 }

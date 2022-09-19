@@ -1,35 +1,38 @@
 import { Injectable } from '@angular/core';
+import { Metrica } from 'src/app/models/metrica.model';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Filtro } from 'src/app/models/filtro.model';
-
+import { filter } from 'd3';
 
 @Injectable({
   providedIn: 'root'
 })
-export class FiltroService {
-
+export class MetricaService {
   private metricaApiUrl: string = 'https://localhost:5001/api/Metric';
 
   constructor(private http: HttpClient) { }
 
-  obtenerOpcionesDeFiltros(): Observable<Array<Filtro>> {
+  obtenerMetricas(filtersValues: {[key: string]: string | number | boolean}): Observable<Array<Metrica>> {
     const aliasCnnString = localStorage.getItem('aliasCnnString');
-    const url = `${this.metricaApiUrl}/getFiltersOptions`
+    const url = `${this.metricaApiUrl}/getMetrics`
     const httpOptions = {
       headers: {
         'Content-Type': 'application/json'
       }
     }
 
+    console.log(filtersValues);
+    console.log(JSON.stringify(filtersValues));
+
     const body = {
       connectionString: aliasCnnString,
-      filtersName: ['Grados Operativos', 'Rubros', 'Zonas']
+      filtersValues: filtersValues
     }
     
-    return this.http.post<Array<Filtro>>(
+    return this.http.post<Array<Metrica>>(
       url,
       JSON.stringify(body),
       httpOptions)
   }
+
 }

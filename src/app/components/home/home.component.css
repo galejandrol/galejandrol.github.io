@@ -48,3 +48,8 @@ p {
 .clickable {
   cursor: pointer;
 }
+
+.example-container {
+  background-color: lightgray;
+  height: 100%;
+}

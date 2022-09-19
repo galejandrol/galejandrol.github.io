@@ -1,21 +1,24 @@
-<div>
-    <app-filtro [metricId]="metricId"></app-filtro>
-    <div>
+
+<div style="display: flex; flex-direction: column; width: 100%; align-items: center;">
+    <mat-toolbar class="toolbar">
+        <mat-icon fontIcon="arrow_back" (click)="mostrarListaDeModulos()" style="cursor: pointer;"></mat-icon>
+    </mat-toolbar>
+    <div style="display: flex; flex-direction: column; width: 100%; align-items: center;">
+        <app-filtro (sendMetricas)="actualizarMetricas($event)" [metricId]="metricId" style="width: 85%; margin-bottom: 50px;"></app-filtro>
         <ngx-charts-bar-vertical
-        [view]="view"
-        [results]="asd"
-        [gradient]="gradient"
-        [xAxis]="showXAxis"
-        [yAxis]="showYAxis"
-        [legend]="showLegend"
-        [showXAxisLabel]="showXAxisLabel"
-        [showYAxisLabel]="showYAxisLabel"
-        [xAxisLabel]="xAxisLabel"
-        [yAxisLabel]="yAxisLabel"
-        [legendTitle]="legendTitle">
-    </ngx-charts-bar-vertical>
-    </div>
-    <div>
-        <button mat-raised-button color="warn" (click)="mostrarListaDeModulos()">Atras</button>
+            (window:resize)="onResize($event)"
+            [view]="view"
+            [results]="metricas"
+            [gradient]="gradient"
+            [xAxis]="showXAxis"
+            [yAxis]="showYAxis"
+            [legend]="showLegend"
+            [showXAxisLabel]="showXAxisLabel"
+            [showYAxisLabel]="showYAxisLabel"
+            [xAxisLabel]="xAxisLabel"
+            [yAxisLabel]="yAxisLabel"
+            [legendTitle]="legendTitle"
+            [customColors]="customColors">
+        </ngx-charts-bar-vertical>
     </div>
 </div>

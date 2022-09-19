@@ -8,14 +8,14 @@
       <div *ngFor="let filtro of filtros" class="filtroContainer">
         <mat-form-field appearance="fill" style="width: 100%;">
           <mat-label> {{ filtro.label }}</mat-label>
-          <mat-select id="{{ filtro.name }}" (selectionChange)="select($event)">
+          <mat-select id="{{ filtersHtmlId[filtro.name] }}" (selectionChange)="select($event)">
             <mat-option *ngFor="let filterOption of filtro.filterOptions" [value]="filterOption.id">
               {{ filterOption.descripcion }}
             </mat-option>
           </mat-select>
         </mat-form-field>
       </div>
-      <div *ngIf="mostrasrFiltroFechaPersonalizada" class="filtroContainer">
+      <div *ngIf="mostrarFiltroFechaPersonalizada" class="filtroContainer">
         <mat-form-field appearance="fill" style="width: 100%;">
           <mat-label>Ingrese un rango de fechas:</mat-label>
           <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
