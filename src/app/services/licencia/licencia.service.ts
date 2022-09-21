@@ -8,7 +8,8 @@ import { Licencia } from 'src/app/models/licencia.model';
   providedIn: 'root'
 })
 export class LicenciaService {
-  private aliasApiURL: string = 'https://localhost:6001/api/v1/Licenses/Alias';
+  //private aliasApiURL: string = 'https://localhost:6001/api/v1/Licenses/Alias';
+  private aliasApiURL: string = 'https://gestion.paramedic-pilar.com.ar/License/api/v1/Licenses/Alias';
 
   constructor(private http: HttpClient) {}
 

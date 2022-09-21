@@ -9,7 +9,8 @@ import { Filtro } from 'src/app/models/filtro.model';
 })
 export class FiltroService {
 
-  private metricaApiUrl: string = 'https://localhost:5001/api/Metric';
+  //private metricaApiUrl: string = 'https://localhost:5001/api/Metric';
+  private metricaApiUrl: string = 'https://gestion.paramedic-pilar.com.ar/metrics/api/Metric';
 
   constructor(private http: HttpClient) { }
 

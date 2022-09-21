@@ -8,7 +8,8 @@ import { filter } from 'd3';
   providedIn: 'root'
 })
 export class MetricaService {
-  private metricaApiUrl: string = 'https://localhost:5001/api/Metric';
+  //private metricaApiUrl: string = 'https://localhost:5001/api/Metric';
+  private metricaApiUrl: string = 'https://gestion.paramedic-pilar.com.ar/metrics/api/Metric';
 
   constructor(private http: HttpClient) { }
 
