@@ -32,6 +32,8 @@ export class MetricaComponent implements OnInit {
 
     this.customColors = [...newMetricsColors];
     this.metricas = [...newMetrics];
+
+    console.log(this.metricas)
   }
 
   // options

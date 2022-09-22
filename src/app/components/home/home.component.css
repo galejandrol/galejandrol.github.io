@@ -53,3 +53,13 @@ p {
   background-color: lightgray;
   height: 100%;
 }
+
+:host {
+  display: flex;
+  flex-direction: column;
+}
+
+#modulosList {
+  width: 90%;
+  margin: auto;
+}

@@ -3,9 +3,9 @@
     <mat-toolbar class="toolbar">
         <mat-icon fontIcon="arrow_back" (click)="mostrarListaDeModulos()" style="cursor: pointer;"></mat-icon>
     </mat-toolbar>
-    <div style="display: flex; flex-direction: column; width: 100%; align-items: center;">
-        <app-filtro (sendMetricas)="actualizarMetricas($event)" [metricId]="metricId" style="width: 85%; margin-bottom: 50px;"></app-filtro>
-        <ngx-charts-bar-vertical
+    <div  style="display: flex; flex-direction: column; width: 100%; align-items: center;">
+        <app-filtro (sendMetricas)="actualizarMetricas($event)" [metricId]="metricId"></app-filtro>
+        <ngx-charts-bar-vertical *ngIf="metricas.length > 0"
             (window:resize)="onResize($event)"
             [view]="view"
             [results]="metricas"
@@ -21,4 +21,5 @@
             [customColors]="customColors">
         </ngx-charts-bar-vertical>
     </div>
+    <p *ngIf="metricas.length == 0">No hay resultados para mostrar.</p>
 </div>

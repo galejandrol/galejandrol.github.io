@@ -22,9 +22,6 @@ export class MetricaService {
       }
     }
 
-    console.log(filtersValues);
-    console.log(JSON.stringify(filtersValues));
-
     const body = {
       connectionString: aliasCnnString,
       filtersValues: filtersValues

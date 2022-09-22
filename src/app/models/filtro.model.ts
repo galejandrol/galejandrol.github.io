@@ -4,6 +4,7 @@ export class Filtro {
     constructor(
         public name: string = '',
         public label: string = '',
+        public defaultValue: string = '',
         public filterOptions: Array<FiltroOptions> = []
     ){}
 }

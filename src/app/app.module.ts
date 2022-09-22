@@ -35,6 +35,7 @@ import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule} from '@angular/material/core';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MAT_DATE_LOCALE } from '@angular/material/core'
 
 
@@ -70,6 +71,7 @@ import { MAT_DATE_LOCALE } from '@angular/material/core'
     MatDatepickerModule,
     ReactiveFormsModule,
     MatNativeDateModule,
+    MatProgressSpinnerModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
       // Register the ServiceWorker as soon as the application is stable

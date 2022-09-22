@@ -12,13 +12,15 @@
           <span>Cerrar sesion</span>
           </button>
       </mat-menu>
-  </mat-toolbar>  
-  <div id="modulosList" style="width: 60%; margin:auto;">
+  </mat-toolbar>
+  <div *ngIf="showSpinner" style="display: flex; flex-direction: column; align-items: center; height: 100%; justify-content: center;">
+    <mat-spinner  style="margin-top:20px;" [diameter]="50"></mat-spinner>
+  </div>
+  <div id="modulosList" *ngIf="!showSpinner">
     <mat-card *ngFor="let modulo of modulos" class="clickable" (click)="mostrarMetricaDelModulo(modulo['codigo'])" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 200px; margin: 20px 0 20px 0;">
         <mat-card-content >
           <p style="font-size: 15px; font-weight: bold;">{{ modulo.descripcion | uppercase }}</p>
         </mat-card-content>
     </mat-card>
   </div>
-<!--   <app-metrica id="metricaModulo" style="display: none;"></app-metrica> -->
 </div>

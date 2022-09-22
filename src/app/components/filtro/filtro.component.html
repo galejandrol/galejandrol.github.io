@@ -1,5 +1,5 @@
 <mat-accordion>
-    <mat-expansion-panel class="filtrosContainer">
+    <mat-expansion-panel [(expanded)]="openPanelState">
       <mat-expansion-panel-header>
         <mat-panel-title>
           <strong>Filtros</strong>
@@ -8,14 +8,14 @@
       <div *ngFor="let filtro of filtros" class="filtroContainer">
         <mat-form-field appearance="fill" style="width: 100%;">
           <mat-label> {{ filtro.label }}</mat-label>
-          <mat-select id="{{ filtersHtmlId[filtro.name] }}" (selectionChange)="select($event)">
+          <mat-select [(value)]="filtersHtmlId[filtro.defaultValue]" id="{{ filtersHtmlId[filtro.name] }}" (selectionChange)="select($event)">
             <mat-option *ngFor="let filterOption of filtro.filterOptions" [value]="filterOption.id">
               {{ filterOption.descripcion }}
             </mat-option>
           </mat-select>
         </mat-form-field>
       </div>
-      <div *ngIf="mostrarFiltroFechaPersonalizada" class="filtroContainer">
+      <div *ngIf="mostrarFiltroFechaPersonalizada">
         <mat-form-field appearance="fill" style="width: 100%;">
           <mat-label>Ingrese un rango de fechas:</mat-label>
           <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
@@ -29,14 +29,14 @@
           <mat-error *ngIf="range.controls.fechaHasta.hasError('matEndDateInvalid')">Fecha hasta invalida</mat-error>
         </mat-form-field>
         </div>
-      <div class="filtroContainer">
+      <div>
         <mat-checkbox id="includeAnulados" (change)="select($event)" checked>Anulados</mat-checkbox>
       </div>
-      <div class="filtroContainer">
+      <div>
         <mat-checkbox id="includeNoAtendidos" (change)="select($event)" checked>No atendidos</mat-checkbox>
       </div>
       <div id="aplicarFiltros">
-        <button mat-raised-button color="primary" (click)="aplicarFiltro()">Aplicar</button>
+        <button mat-raised-button id="btnAplicarFiltros" color="primary" (click)="aplicarFiltro()">Aplicar</button>
       </div>
     </mat-expansion-panel>
   </mat-accordion>

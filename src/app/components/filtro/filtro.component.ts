@@ -12,30 +12,27 @@ import { MetricaService } from 'src/app/services/metrica/metrica.service';
 
 export class FiltroComponent implements OnInit {
 
-  filtersHtmlId: {[key: string]: string} = {
-    "GradosOperativos": "gradoOperativoId",
-    "RubrosClientes": "rubroId",
-    "ZonasGeograficas": "zonaGeograficaId",
-    "rangoDeFechas": "rangoDeFechas"
-  }
-
   @Input() metricId: string = '';
   @Output() sendMetricas = new EventEmitter<Array<any>>();
   mostrarFiltroFechaPersonalizada: boolean = false;
+  openPanelState = false;
 
   range = new FormGroup({
     fechaDesde: new FormControl<Date | null>(null),
     fechaHasta: new FormControl<Date | null>(null),
   });
 
+  hoy = `${this.getDateByDaysAgo(0)}-${this.getDateByDaysAgo(0)}`;
+
   filtros: Array<Filtro> = [];
 
   private dateFilter: Filtro = {
     label: "Fecha",
     name: "rangoDeFechas",
+    defaultValue: this.hoy,
     filterOptions: [
       {
-        id: `${this.getDateByDaysAgo(0)}-${this.getDateByDaysAgo(0)}`,
+        id: this.hoy,
         descripcion: "HOY"
       },
       {
@@ -51,6 +48,13 @@ export class FiltroComponent implements OnInit {
         descripcion: "PERSONALIZADA"
       },
     ]
+  }
+
+  filtersHtmlId: {[key: string]: any} = {
+    "GradosOperativos": "gradoOperativoId",
+    "RubrosClientes": "rubroId",
+    "ZonasGeograficas": "zonaGeograficaId",
+    "rangoDeFechas": "rangoDeFechas",
   }
 
   filtrosSeleccionados = new Map<string, string | number | boolean>([
@@ -75,22 +79,37 @@ export class FiltroComponent implements OnInit {
     })
 
     this.filtrosSeleccionados.set('metricId', this.metricId);
+    
   }
 
   aplicarFiltro(): void {
-    if (this.validDatePickerRangeValues()) {
-        this.filtrosSeleccionados.set('rangoDeFechas', `${this.range.controls.fechaDesde.value!.toLocaleDateString()}-${this.range.controls.fechaHasta.value!.toLocaleDateString()}`);
-    }
+    this.openPanelState = !this.openPanelState;
+    console.log(this.filtrosSeleccionados);
 
-    this.metricaService.obtenerMetricas(Object.fromEntries(this.filtrosSeleccionados))
-    .subscribe({
-      next: (metricas) => {
-        this.sendMetricas.emit(metricas);
-      },
-      error: (err) => {
-        console.error(`HTTP ERROR - [CODE: ${err.status}], [MESSAGE: ${err.statusText}]`);
+    if (this.mostrarFiltroFechaPersonalizada) {
+      if (this.validDatePickerRangeValues()) {
+        this.filtrosSeleccionados.set('rangoDeFechas', `${this.range.controls.fechaDesde.value!.toLocaleDateString()}-${this.range.controls.fechaHasta.value!.toLocaleDateString()}`);
+        this.metricaService.obtenerMetricas(Object.fromEntries(this.filtrosSeleccionados))
+        .subscribe({
+          next: (metricas) => {
+            this.sendMetricas.emit(metricas);
+          },
+          error: (err) => {
+            console.error(`HTTP ERROR - [CODE: ${err.status}], [MESSAGE: ${err.statusText}]`);
+          }
+        });
       }
-    });
+    } else {
+      this.metricaService.obtenerMetricas(Object.fromEntries(this.filtrosSeleccionados))
+      .subscribe({
+        next: (metricas) => {
+          this.sendMetricas.emit(metricas);
+        },
+        error: (err) => {
+          console.error(`HTTP ERROR - [CODE: ${err.status}], [MESSAGE: ${err.statusText}]`);
+        }
+      });
+    }
   }
 
   select(event: any){
@@ -107,23 +126,7 @@ export class FiltroComponent implements OnInit {
       }
     }
 
-    console.log(htmlElementId);
-    this.filtrosSeleccionados.set(htmlElementId, value);
-
-    //console.log(JSON.stringify(Object.fromEntries(this.prueba)));
-/*     let filtroNames = this.filtrosSeleccionados.map(function(a) {return a.filtro;});
-    
-
-    if (filtroNames.includes(htmlElementId)) {
-      let index = filtroNames.indexOf(htmlElementId);
-      this.filtrosSeleccionados[index].value = value;
-    } else {
-      this.filtrosSeleccionados.push({
-        filtro: htmlElementId,
-        value: value
-      })
-    } */
-    
+    this.filtrosSeleccionados.set(htmlElementId, value);    
   }
 
   private getDateByDaysAgo(days: number): string {
@@ -132,10 +135,11 @@ export class FiltroComponent implements OnInit {
   }
 
   private validDatePickerRangeValues(): boolean {
-    return (this.mostrarFiltroFechaPersonalizada &&
+    return (
       this.range.controls.fechaDesde.valid &&
       this.range.controls.fechaHasta.valid &&
       this.range.controls.fechaDesde.value != null &&
-      this.range.controls.fechaHasta.value != null);
+      this.range.controls.fechaHasta.value != null
+    );
   }
 }

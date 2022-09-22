@@ -3,7 +3,6 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from '@angular/router';
 
 import { Licencia } from 'src/app/models/licencia.model';
-import { Usuario } from 'src/app/models/usuario.model';
 
 import { LicenciaService } from 'src/app/services/licencia/licencia.service';
 import { UsuarioService } from 'src/app/services/usuario/usuario.service';
@@ -19,6 +18,7 @@ export class LoginComponent implements OnInit {
   username: string = '';
   password: string = '';
   connectionString: string = '';
+  showSpinner: boolean = false;
 
   constructor(private licenciaService: LicenciaService, private usuarioService: UsuarioService, private snackBar: MatSnackBar, private router: Router) {}
 
@@ -28,16 +28,22 @@ export class LoginComponent implements OnInit {
     }
   }
 
+  prueba() {
+    console.log("hola")
+  }
+
   login(){
     if (this.username != '' && this.password != '' && this.alias != ''){
       this.validarAlias();
     }
   }
 
-  validarAlias(){
+  validarAlias(){    
+    this.showSpinner = true;
     this.licenciaService.validarAlias(this.alias)
       .subscribe({
         next: (licencia) => {
+
           this.licencia = licencia;
           this.licencia.alias = this.alias;
   
@@ -76,6 +82,8 @@ export class LoginComponent implements OnInit {
             console.error(`HTTP ERROR - [CODE: ${err.status}], [MESSAGE: ${err.statusText}]`);
           }
         }
+      }).add(() => {
+        this.showSpinner = false;
       })
   }
 
