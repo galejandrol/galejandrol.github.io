@@ -1,6 +1,6 @@
 export class FiltroOptions {
     constructor(
-        public id: string = '',
-        public descripcion: string = ''
+        public value: string | number,
+        public viewValue: string
     ){}
 }

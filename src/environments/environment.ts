@@ -3,7 +3,9 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  aliasApiURL: 'https://localhost:6001/api/v1/Licenses/Alias',
+  metricaApiUrl: 'https://localhost:5001/api/Metric'
 };
 
 /*
