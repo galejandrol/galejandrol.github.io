@@ -30,19 +30,18 @@
         </mat-form-field>
         </div>
       <div>
-        <mat-checkbox aria-label="Anulados" id="includeAnulados" [value]="includeAnulados" (change)="select($event)" checked>Anulados</mat-checkbox>
+        <mat-checkbox aria-label="Anulados" id="includeAnulados" #includeAnulados (change)="select($event)" checked>Anulados</mat-checkbox>
       </div>
       <div>
-        <mat-checkbox aria-label="No Atendidos" id="includeNoAtendidos" [value]="includeNoAtendidos" (change)="select($event)" checked>No atendidos</mat-checkbox>
+        <mat-checkbox aria-label="No Atendidos" id="includeNoAtendidos" #includeNoAtendidos (change)="select($event)" checked>No atendidos</mat-checkbox>
       </div>
       <div id="aplicarFiltros">
         <button mat-raised-button id="btnAplicarFiltros" color="primary" (click)="aplicarFiltro()">Aplicar</button>
       </div>
     </mat-expansion-panel>
 </mat-accordion>
-<!-- <mat-form-field class="example-chip-list" appearance="fill">
-  <mat-label>Filtros aplicados:</mat-label> -->
-  <mat-chip-list #chipList>
+<div style="margin-top: 20px;">
+  <mat-chip-list>
     <mat-chip
       *ngFor="let filtroAplicado of filtrosAplicados"
       (removed)="remove(filtroAplicado)">
@@ -52,4 +51,4 @@
       </button>
     </mat-chip>
   </mat-chip-list>
-<!-- </mat-form-field> -->
+</div>

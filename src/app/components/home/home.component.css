@@ -51,12 +51,12 @@ p {
 
 .example-container {
   background-color: lightgray;
-  height: 100%;
 }
 
 :host {
   display: flex;
   flex-direction: column;
+  height: 100%;
 }
 
 #modulosList {

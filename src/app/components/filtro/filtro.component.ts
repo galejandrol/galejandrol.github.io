@@ -5,7 +5,6 @@ import { FiltroService } from 'src/app/services/filtro/filtro.service';
 import { MetricaService } from 'src/app/services/metrica/metrica.service';
 import { ViewChild } from '@angular/core';
 import { MatCheckbox } from '@angular/material/checkbox';
-import { id } from '@swimlane/ngx-charts';
 
 @Component({
   selector: 'app-filtro',
@@ -15,10 +14,11 @@ import { id } from '@swimlane/ngx-charts';
 
 export class FiltroComponent implements OnInit {
 
-  includeAnulados: string = "checked";
-  includeNoAtendidos: string = "checked";
+  @ViewChild('includeAnulados') private chkIncludeAnulados!: MatCheckbox;
+  @ViewChild('includeNoAtendidos') private chkIncludeNoAtendidos!: MatCheckbox;
 
   @Input() metricId: string = '';
+  @Output() showSpinner = new EventEmitter<boolean>();
   @Output() sendMetricas = new EventEmitter<Array<any>>();
   mostrarFiltroFechaPersonalizada: boolean = false;
   openPanelState = false;
@@ -69,6 +69,7 @@ export class FiltroComponent implements OnInit {
   }
 
   filtrosAplicados: Array<{[key: string]: string}> = [];
+  filtrosAplicadosTemporal: Array<{[key: string]: string}> = [];
 
   filtrosSeleccionados = new Map<string, string | number | boolean>([
     ["clienteId", 0],
@@ -83,10 +84,13 @@ export class FiltroComponent implements OnInit {
   constructor(private filtroService: FiltroService, private metricaService: MetricaService) {}
 
   ngOnInit(): void {
+    this.obtenerFiltros();
+  }
+
+  obtenerFiltros(): void {
     this.filtroService.obtenerOpcionesDeFiltros()
     .subscribe({
       next: (filtrosOpcionesArray) => {
-        console.log(filtrosOpcionesArray);
         this.filtros = filtrosOpcionesArray;
         this.filtros.push(this.dateFilter);
 
@@ -106,14 +110,16 @@ export class FiltroComponent implements OnInit {
     })
 
     this.filtrosSeleccionados.set('metricId', this.metricId);
-    
   }
 
   aplicarFiltro(): void {
+    this.showSpinner.emit(true);
+    console.log(this.filtrosAplicadosTemporal)
     if (this.mostrarFiltroFechaPersonalizada) {
       if (this.validDatePickerRangeValues()) {
-        this.openPanelState = !this.openPanelState;
-        this.filtrosSeleccionados.set('rangoDeFechas', `${this.range.controls.fechaDesde.value!.toLocaleDateString()}-${this.range.controls.fechaHasta.value!.toLocaleDateString()}`);
+        let rangoDeFechas = `${this.range.controls.fechaDesde.value!.toLocaleDateString()}-${this.range.controls.fechaHasta.value!.toLocaleDateString()}`;
+        this.openPanelState = false;
+        this.filtrosSeleccionados.set('rangoDeFechas', rangoDeFechas);
         this.metricaService.obtenerMetricas(Object.fromEntries(this.filtrosSeleccionados))
         .subscribe({
           next: (metricas) => {
@@ -123,9 +129,11 @@ export class FiltroComponent implements OnInit {
             console.error(`HTTP ERROR - [CODE: ${err.status}], [MESSAGE: ${err.statusText}]`);
           }
         });
+
+        this.filtrosAplicados = Object.assign([], this.filtrosAplicadosTemporal);
       }
     } else {
-      this.openPanelState = !this.openPanelState;
+      this.openPanelState = false;
       this.metricaService.obtenerMetricas(Object.fromEntries(this.filtrosSeleccionados))
       .subscribe({
         next: (metricas) => {
@@ -135,14 +143,18 @@ export class FiltroComponent implements OnInit {
           console.error(`HTTP ERROR - [CODE: ${err.status}], [MESSAGE: ${err.statusText}]`);
         }
       });
+
+      this.filtrosAplicados = Object.assign([], this.filtrosAplicadosTemporal);
     }
+
+    
   }
 
   select(event: any){
     let htmlElementId = event.source.id;
     let value = (typeof event.value === 'undefined') ? (event.checked ? true : false) : (htmlElementId === 'rangoDeFechas' ? this.dateFilterValues[event.value] : event.value);
     let viewValue = (typeof event.source.selected === 'undefined') ? (value ? "SI" : "NO") : event.source.selected.viewValue;
-    
+
     if (htmlElementId === 'rangoDeFechas') {
       if (value === 'PERSONALIZADA') {
         this.mostrarFiltroFechaPersonalizada = true;
@@ -155,9 +167,10 @@ export class FiltroComponent implements OnInit {
 
     this.filtrosSeleccionados.set(htmlElementId, value);
 
-    let index = this.filtrosAplicados.findIndex((element) => element['id'] == htmlElementId);
+    let index = this.filtrosAplicadosTemporal.findIndex((element) => element['id'] == htmlElementId);
 
     console.log(viewValue)
+    console.log(value)
 
     let filtroAplicado = {
       "id": htmlElementId,
@@ -166,10 +179,51 @@ export class FiltroComponent implements OnInit {
     }
 
     if (index != -1 ){
-      this.filtrosAplicados[index] = filtroAplicado;
+      this.filtrosAplicadosTemporal[index] = filtroAplicado;
     } else {
-      this.filtrosAplicados.push(filtroAplicado);
+      this.filtrosAplicadosTemporal.push(filtroAplicado);
     }
+  }
+
+  remove(filtroAplicado: {[key: string]: string}){
+    let indexFiltroAplicado = this.filtrosAplicados.findIndex((element) => element['id'] == filtroAplicado['id']);
+    let indexFiltro = this.filtros.findIndex((element) => element.label == filtroAplicado['label']);
+    let value: string | boolean | number = 0;
+
+    this.filtrosAplicadosTemporal.splice(indexFiltroAplicado, 1);
+
+    if (indexFiltro != -1){
+      this.filtros[indexFiltro].defaultValue = 0;
+    }
+
+    switch(filtroAplicado['id']) { 
+      case 'rangoDeFechas': {
+        value = this.dateFilterValues["0"];
+        if(filtroAplicado['viewValue'] === 'PERSONALIZADA') {
+          this.mostrarFiltroFechaPersonalizada = false;
+          this.range.controls.fechaDesde.reset();
+          this.range.controls.fechaHasta.reset();
+        }
+        break; 
+      }
+      case 'includeAnulados': {
+        value = true;
+        this.chkIncludeAnulados.checked = true;
+        break; 
+      }
+      case 'includeNoAtendidos': {
+        value = true;
+        this.chkIncludeNoAtendidos.checked = true;
+        break; 
+      }
+      default: {
+        //statements; 
+        break; 
+      } 
+    }
+
+    this.filtrosSeleccionados.set(filtroAplicado['id'], value);
+    this.aplicarFiltro();
   }
 
   private getDateByDaysAgo(days: number): string {
@@ -184,78 +238,5 @@ export class FiltroComponent implements OnInit {
       this.range.controls.fechaDesde.value != null &&
       this.range.controls.fechaHasta.value != null
     );
-  }
-
-  remove(filtroAplicado: {[key: string]: string}){
-    let indexFiltroAplicado = this.filtrosAplicados.findIndex((element) => element['id'] == filtroAplicado['id']);
-    let indexFiltro = this.filtros.findIndex((element) => element.label == filtroAplicado['label']);
-    let value: string | boolean = true;
-
-    console.log(indexFiltro);
-    
-    console.log(filtroAplicado);
-    this.filtrosAplicados.splice(indexFiltroAplicado, 1);
-
-    if (indexFiltro != -1){
-      this.filtros[indexFiltro].defaultValue = 0;
-    }
-
-    switch(filtroAplicado['id']) { 
-      case 'rangoDeFechas': {
-
-        if(filtroAplicado['viewValue'] === 'PERSONALIZADA') {
-          this.mostrarFiltroFechaPersonalizada = false;
-          this.range.controls.fechaDesde.reset();
-          this.range.controls.fechaHasta.reset();
-          value = this.dateFilterValues["0"];
-        }
-        break; 
-      }
-      case 'includeAnulados': {
-          this.includeAnulados = "checked";
-        break; 
-      }
-      case 'includeNoAtendidos': {
-          this.includeNoAtendidos = "checked";
-        break; 
-      }
-      default: {
-        //statements; 
-        break; 
-      } 
-    }
-
-    switch(filtroAplicado['viewValue']) { 
-      case 'PERSONALIZADA': {
-        this.mostrarFiltroFechaPersonalizada = false;
-        this.range.controls.fechaDesde.reset();
-        this.range.controls.fechaHasta.reset();
-        break; 
-      }
-      case 'SI': {
-        if (filtroAplicado['id'] == 'includeAnulados') {
-          this.includeAnulados = "checked";
-        } else {
-          this.includeNoAtendidos = "checked";
-        }
-        break; 
-      }
-      case 'NO': {
-        if (filtroAplicado['id'] == 'includeAnulados') {
-          this.includeAnulados = "checked";
-        } else {
-          this.includeNoAtendidos = "checked";
-        }
-        break; 
-      }
-      default: {
-        //statements; 
-        break; 
-      } 
-    }
-
-    this.filtrosSeleccionados.set(filtroAplicado['id'], value);
-    console.log(this.filtrosSeleccionados);
-    this.aplicarFiltro();
   }
 }
