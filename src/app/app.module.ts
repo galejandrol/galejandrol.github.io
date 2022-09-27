@@ -32,9 +32,11 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { FiltroComponent } from './components/filtro/filtro.component';
 import { MetricaComponent } from './components/metrica/metrica.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { MatChipsModule } from '@angular/material/chips';
 
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule} from '@angular/material/core';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MAT_DATE_LOCALE } from '@angular/material/core'
 
 
@@ -70,6 +72,8 @@ import { MAT_DATE_LOCALE } from '@angular/material/core'
     MatDatepickerModule,
     ReactiveFormsModule,
     MatNativeDateModule,
+    MatProgressSpinnerModule,
+    MatChipsModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
       // Register the ServiceWorker as soon as the application is stable

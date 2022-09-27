@@ -2,13 +2,14 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Licencia } from 'src/app/models/licencia.model';
 import { Modulo } from 'src/app/models/modulo.model';
+import { environment } from 'src/environments/environment';
 import { LicenciaService } from '../licencia/licencia.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ModuloService {
-  private aliasApiURL: string = 'https://localhost:6001/api/v1/Licenses/Alias';
+  private aliasApiURL: string = environment.aliasApiURL;
 
   constructor(private http: HttpClient) {}
 

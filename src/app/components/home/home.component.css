@@ -51,5 +51,15 @@ p {
 
 .example-container {
   background-color: lightgray;
+}
+
+:host {
+  display: flex;
+  flex-direction: column;
   height: 100%;
+}
+
+#modulosList {
+  width: 90%;
+  margin: auto;
 }

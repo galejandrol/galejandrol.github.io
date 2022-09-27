@@ -1,19 +1,19 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-metrica',
   templateUrl: './metrica.component.html',
-  styleUrls: ['./metrica.component.css']
+  styleUrls: ['./metrica.component.css'],
 })
 
 export class MetricaComponent implements OnInit {
-
   routeSub: Subscription = new Subscription();
   metricId: string = '';
   metricas: Array<any> = [];  
   customColors: Array<any> = [];
+  showSpinner = true;
 
   view: [number, number] = [0,0];
 
@@ -32,18 +32,21 @@ export class MetricaComponent implements OnInit {
 
     this.customColors = [...newMetricsColors];
     this.metricas = [...newMetrics];
+    this.showSpinner = false;
+  }
+
+  filtroShowSpinner(showSpinner: boolean): void {
+    this.showSpinner = showSpinner;
   }
 
   // options
   showXAxis = true;
   showYAxis = true;
   gradient = false;
-  showLegend = true;
   showXAxisLabel = true;
   xAxisLabel = 'Grado Operativo';
   showYAxisLabel = true;
   yAxisLabel = 'Cantidad';
-  legendTitle = "Referencia";
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute) {
     this.view = [innerWidth / 1.3, 400];

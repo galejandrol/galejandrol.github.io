@@ -3,12 +3,13 @@ import { Metrica } from 'src/app/models/metrica.model';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { filter } from 'd3';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MetricaService {
-  private metricaApiUrl: string = 'https://localhost:5001/api/Metric';
+  private metricaApiUrl: string = environment.metricaApiUrl;
 
   constructor(private http: HttpClient) { }
 
@@ -20,9 +21,6 @@ export class MetricaService {
         'Content-Type': 'application/json'
       }
     }
-
-    console.log(filtersValues);
-    console.log(JSON.stringify(filtersValues));
 
     const body = {
       connectionString: aliasCnnString,

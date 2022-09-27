@@ -17,6 +17,7 @@ export class HomeComponent implements OnInit {
   public usuarioNombreCompleto: string = '';
   private alias: string = '';
   public metricaSeleccionada: string = '';
+  showSpinner: boolean = true;
 
   constructor(public moduloService: ModuloService, private licenciaService: LicenciaService, private usuarioService: UsuarioService, changeDetectorRef: ChangeDetectorRef, media: MediaMatcher, private router: Router) {
     this.modulos = [];
@@ -35,7 +36,10 @@ export class HomeComponent implements OnInit {
   obtenerModulos(){
     this.moduloService.obtenerModulosPorAlias(this.alias)
     .subscribe({
-      next: (modulos) => this.modulos = modulos,
+      next: (modulos) => {
+        this.modulos = modulos;
+        this.showSpinner = false;
+      },
       error: (err) => {
         console.error(`HTTP ERROR - [CODE: ${err.status}], [MESSAGE: ${err.statusText}]`);
       }

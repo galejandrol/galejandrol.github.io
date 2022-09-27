@@ -12,6 +12,9 @@
       <mat-label>Contraseña</mat-label>
       <input matInput type="password" [(ngModel)]=password name="password" required>
     </mat-form-field>
-    <button mat-raised-button color="accent" (click)="login()" style="background-color: #8bc541; width: 100%;">Ingresar</button>
+    <button [disabled]="showSpinner" mat-raised-button color="accent" (click)="login()" style="background-color: #8bc541; width: 100%;">Ingresar</button>
   </form>
+  <div style="display: flex; flex-direction: column; align-items: center;">
+    <mat-spinner *ngIf="showSpinner" style="margin-top:20px;" [diameter]="50"></mat-spinner>
+  </div>
 </div>

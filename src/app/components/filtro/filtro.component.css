@@ -1,20 +1,18 @@
-.filtrosContainer {
-    margin-top: 20px !important;
-    margin-right: auto;
-    margin-left: auto;
-    width: 80%;
-}
-
-.filtroContainer {
-    width: 60%;
-    margin: auto;
-}
-
 #aplicarFiltros {
-    width: 60%;
-    margin: 30px auto auto auto;
+    width: 100%;
+    text-align: center;
 }
 
-.prueba {
-    margin-top: 15px;
+#btnAplicarFiltros {
+    margin-top: 30px;
+}
+
+:host {
+    width: 90%;
+    margin-bottom: 40px;
+    margin-top: 20px;
+}
+
+.example-chip-list {
+    width: 100%;
 }

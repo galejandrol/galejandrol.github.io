@@ -2,14 +2,14 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Filtro } from 'src/app/models/filtro.model';
+import { environment } from 'src/environments/environment';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class FiltroService {
-
-  private metricaApiUrl: string = 'https://localhost:5001/api/Metric';
+  private metricaApiUrl: string = environment.metricaApiUrl;
 
   constructor(private http: HttpClient) { }
 

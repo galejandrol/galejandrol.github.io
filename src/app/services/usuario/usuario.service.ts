@@ -3,13 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { Licencia } from 'src/app/models/licencia.model';
 import { Usuario } from 'src/app/models/usuario.model';
 import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UsuarioService {
-
-  private aliasApiURL: string = 'https://localhost:6001/api/v1/Licenses/Alias';
+  private aliasApiURL: string = environment.aliasApiURL;
 
   constructor(private http: HttpClient) {}
 
