@@ -114,7 +114,6 @@ export class FiltroComponent implements OnInit {
 
   aplicarFiltro(): void {
     this.showSpinner.emit(true);
-    console.log(this.filtrosAplicadosTemporal)
     if (this.mostrarFiltroFechaPersonalizada) {
       if (this.validDatePickerRangeValues()) {
         let rangoDeFechas = `${this.range.controls.fechaDesde.value!.toLocaleDateString()}-${this.range.controls.fechaHasta.value!.toLocaleDateString()}`;
@@ -168,9 +167,6 @@ export class FiltroComponent implements OnInit {
     this.filtrosSeleccionados.set(htmlElementId, value);
 
     let index = this.filtrosAplicadosTemporal.findIndex((element) => element['id'] == htmlElementId);
-
-    console.log(viewValue)
-    console.log(value)
 
     let filtroAplicado = {
       "id": htmlElementId,
@@ -228,7 +224,7 @@ export class FiltroComponent implements OnInit {
 
   private getDateByDaysAgo(days: number): string {
     const now = new Date();
-    return new Date(now.getTime() - days * 24 * 60 * 60 * 1000).toLocaleDateString();
+    return this.formatDate(new Date(now.getTime() - days * 24 * 60 * 60 * 1000));
   }
 
   private validDatePickerRangeValues(): boolean {
@@ -238,5 +234,17 @@ export class FiltroComponent implements OnInit {
       this.range.controls.fechaDesde.value != null &&
       this.range.controls.fechaHasta.value != null
     );
+  }
+
+  private padTo2Digits(num: number) {
+    return num.toString().padStart(2, '0');
+  }
+  
+  private formatDate(date: Date) {
+    return [
+      this.padTo2Digits(date.getDate()),
+      this.padTo2Digits(date.getMonth() + 1),
+      date.getFullYear(),
+    ].join('/');
   }
 }

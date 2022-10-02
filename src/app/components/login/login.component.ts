@@ -28,10 +28,6 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  prueba() {
-    console.log("hola")
-  }
-
   login(){
     if (this.username != '' && this.password != '' && this.alias != ''){
       this.validarAlias();
@@ -48,12 +44,12 @@ export class LoginComponent implements OnInit {
           this.licencia.alias = this.alias;
   
           let hoy = new Date();
-          let fechaDeVencimiento = new Date(licencia.fechaDeVencimiento);
+          let fechaDeVencimiento = new Date(licencia.fechaDeVencimiento.replace(/ /g, "T"));
   
           if (fechaDeVencimiento >= hoy){
   
             let diferenciaEnMilisegundos = fechaDeVencimiento.getTime() - hoy.getTime();
-            let diferenciaEnDias = diferenciaEnMilisegundos / (1000 * 3600 * 24);
+            let diferenciaEnDias = Math.round(diferenciaEnMilisegundos / (1000 * 3600 * 24));
 
             if (diferenciaEnDias < 20) {
               this.snackBar.open(`Faltan ${diferenciaEnDias} día/s para el vencimiento de la licencia`, "Cerrar", {
@@ -66,6 +62,7 @@ export class LoginComponent implements OnInit {
               this.validarCredencialesDelUsuario();
             }
           } else {
+            this.showSpinner = false;
             this.snackBar.open(`Su licencia se encuentra vencida. Contactar a su proveedor`, "Cerrar", {
               duration: 3000,
               panelClass: ['error-snackbar']
@@ -74,6 +71,7 @@ export class LoginComponent implements OnInit {
         },
         error: (err) => {
           if (err.status === 404){
+            this.showSpinner = false;
             this.snackBar.open('La empresa seleccionada es inexistente o no tiene accesibilidad remota', "Cerrar", {
               duration: 3000,
               panelClass: ['error-snackbar']
@@ -82,9 +80,7 @@ export class LoginComponent implements OnInit {
             console.error(`HTTP ERROR - [CODE: ${err.status}], [MESSAGE: ${err.statusText}]`);
           }
         }
-      }).add(() => {
-        this.showSpinner = false;
-      })
+      });
   }
 
   validarCredencialesDelUsuario() {
@@ -105,6 +101,8 @@ export class LoginComponent implements OnInit {
           console.error(`HTTP ERROR - [CODE: ${err.status}], [MESSAGE: ${err.statusText}]`);
         }
       }
+    }).add(() => {
+      this.showSpinner = false;
     })
   }
 }
