@@ -153,7 +153,7 @@ export class FiltroComponent implements OnInit {
         }
       });
   
-      this.filtrosAplicados = this.filtrosAplicadosTemporal;
+      this.filtrosAplicados = Object.assign([], this.filtrosAplicadosTemporal);
     }
   }
 
