@@ -4,10 +4,13 @@
 <div [ngClass]="showSpinner ? 'hideFiltersAndMetrics' : 'showFiltersAndMetrics'">
     <mat-toolbar class="toolbar">
         <mat-icon fontIcon="arrow_back" (click)="mostrarListaDeModulos()" style="cursor: pointer;"></mat-icon>
+        <div style="width: 100%; text-align: center;">
+            <p style="margin:0px;">{{ metricsNames[metricId] }}</p>
+        </div>
     </mat-toolbar>
     <div style="display: flex; flex-direction: column; width: 100%; align-items: center;">
         <app-filtro (showSpinner)="filtroShowSpinner($event)" (sendMetricas)="actualizarMetricas($event)" [metricId]="metricId"></app-filtro>
-        <ngx-charts-bar-vertical *ngIf="metricas.length > 0"
+        <ngx-charts-bar-vertical *ngIf="metricas.length > 0 && metricId != '01'"
             (window:resize)="onResize($event)"
             [view]="view"
             [results]="metricas"
@@ -18,8 +21,23 @@
             [showYAxisLabel]="showYAxisLabel"
             [xAxisLabel]="xAxisLabel"
             [yAxisLabel]="yAxisLabel"
-            [customColors]="customColors">
+            [customColors]="customColors"
+            [noBarWhenZero]="noBarWhenZero">
         </ngx-charts-bar-vertical>
+        <ngx-charts-bar-vertical-2d *ngIf="metricas.length > 0 && metricId == '01'"
+            (window:resize)="onResize($event)"
+            [view]="view"
+            [results]="metricas"
+            [gradient]="gradient"
+            [xAxis]="showXAxis"
+            [yAxis]="showYAxis"
+            [showXAxisLabel]="showXAxisLabel"
+            [showYAxisLabel]="showYAxisLabel"
+            [xAxisLabel]="xAxisLabel"
+            [yAxisLabel]="yAxisLabel"
+            [customColors]="customColors"
+            [noBarWhenZero]="noBarWhenZero">
+        </ngx-charts-bar-vertical-2d>
     </div>
     <p *ngIf="metricas.length == 0">No hay resultados para mostrar.</p>
 </div>

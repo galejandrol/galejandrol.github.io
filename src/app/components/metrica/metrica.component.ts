@@ -11,9 +11,17 @@ import { Subscription } from 'rxjs';
 export class MetricaComponent implements OnInit {
   routeSub: Subscription = new Subscription();
   metricId: string = '';
-  metricas: Array<{[key: string]: string | number}> = [];
+
+  metricas: Array<{[key: string]: string | number | Array<any>}> = [];
   customColors: Array<{[key: string]: string}> = [];
   showSpinner = true;
+  public metricsNames: {[key: string]: string} = {
+    "00": "SERVICIOS REALIZADOS",
+    "01": "TIEMPOS OPERATIVOS",
+    "02": "RANKING CLIENTES",
+    "03": "SERVICIOS POR MOVILES",
+    "04": "SERVICIOS POR EMPRESAS"
+  };
 
   // Opciones del gráfico de barra.
   view: [number, number] = [0,0];
@@ -24,6 +32,7 @@ export class MetricaComponent implements OnInit {
   xAxisLabel = '';
   showYAxisLabel = true;
   yAxisLabel = '';
+  noBarWhenZero = true;
 
   // La API (Shaman Metrics) me devuelve un json en base a un dataset obtenido con el store procedure genérico para todas las métricas.
   // Con estas estructuras parseo esa respuesta para adaptarlo según la métrica seleccionada.
@@ -86,6 +95,8 @@ export class MetricaComponent implements OnInit {
   actualizarMetricas(metricas: Array<{[key: string]: string | number}>) {
     let newMetrics: Array<{[key: string]: string | number}> = [];
     let newMetricsColors: Array<{[key: string]: string}> = [];
+    let newGroupMetrics: Array<{[key: string]: string | Array<{[key: string]: string}>}> = [];
+    
 
     metricas.forEach((element: any) => {
 
@@ -97,6 +108,30 @@ export class MetricaComponent implements OnInit {
         "value": element[this.parseMetricsResults[this.metricId]["value"]]
       });
 
+      if (this.metricId == "01"){
+        newGroupMetrics.push({
+          "name": element[this.parseMetricsResults[this.metricId]["name"]],
+          "series": [
+            {
+              "name": "TpoDespacho",
+              "value": element.TpoDespacho
+            },
+            {
+              "name": "TpoSalida",
+              "value": element.TpoSalida
+            },
+            {
+              "name": "TpoDesplazamiento",
+              "value": element.TpoDesplazamiento
+            },
+            {
+              "name": "TpoAtencion",
+              "value": element.TpoAtencion
+            }
+          ]
+        })
+      }
+
       newMetricsColors.push({
         "name": element[this.parseMetricsResults[this.metricId]["name"]],
         "value": "#" + color
@@ -105,7 +140,7 @@ export class MetricaComponent implements OnInit {
     });
 
     this.customColors = [...newMetricsColors];
-    this.metricas = [...newMetrics];
+    this.metricas = newGroupMetrics.length > 0 ? [...newGroupMetrics] : [...newMetrics];
     this.xAxisLabel = this.parseMetricsResults[this.metricId]['xAxisLabel'];
     this.yAxisLabel = this.parseMetricsResults[this.metricId]['yAxisLabel'];
     this.showSpinner = false;
