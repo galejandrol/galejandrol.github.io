@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   aliasApiURL: 'https://localhost:6001/api/v1/Licenses/Alias',
-  metricaApiUrl: 'https://localhost:5001/api/Metric'
+  metricaApiUrl: 'https://localhost:5001/api/Metric',
 };
 
 /*

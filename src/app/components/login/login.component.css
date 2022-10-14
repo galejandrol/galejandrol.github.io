@@ -40,3 +40,14 @@ margin: 0 12px;
     background-image: url("../../../assets/login.png");
     opacity: 0.2;
 }
+
+#spinnerContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#botonIngresar {
+    background-color: #8bc541;
+    width: 100%;
+}

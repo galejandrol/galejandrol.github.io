@@ -13,12 +13,15 @@ import { UsuarioService } from 'src/app/services/usuario/usuario.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent implements OnInit {
+
+  private diasRestantesParaElVencimiento: number = 20;
   licencia: Licencia = new Licencia();
   alias: string = '';
   username: string = '';
   password: string = '';
   connectionString: string = '';
   showSpinner: boolean = false;
+  public hide: boolean = true;
 
   constructor(private licenciaService: LicenciaService, private usuarioService: UsuarioService, private snackBar: MatSnackBar, private router: Router) {}
 
@@ -28,6 +31,7 @@ export class LoginComponent implements OnInit {
     }
   }
 
+  //Valido inputs y luego contra la API de Licencias (Shaman License API).
   login(){
     if (this.username != '' && this.password != '' && this.alias != ''){
       this.validarAlias();
@@ -41,17 +45,21 @@ export class LoginComponent implements OnInit {
         next: (licencia) => {
 
           this.licencia = licencia;
-          this.licencia.alias = this.alias;
-  
+
           let hoy = new Date();
+
+          // Normalizo la fecha de vencimiento que viene de la API a ISO8601 para compatibilidad con Safari.
           let fechaDeVencimiento = new Date(licencia.fechaDeVencimiento.replace(/ /g, "T"));
   
+          // Chequeo si la licencia está vigente.
           if (fechaDeVencimiento >= hoy){
   
             let diferenciaEnMilisegundos = fechaDeVencimiento.getTime() - hoy.getTime();
             let diferenciaEnDias = Math.round(diferenciaEnMilisegundos / (1000 * 3600 * 24));
 
-            if (diferenciaEnDias < 20) {
+            // Si la licencia está vigente pero quedan menos días que los declarados en la variable
+            // diasRestantesParaElVencimiento se muestra un aviso al cliente durante 3 segundos y se procede a validar el login.
+            if (diferenciaEnDias < this.diasRestantesParaElVencimiento) {
               this.snackBar.open(`Faltan ${diferenciaEnDias} día/s para el vencimiento de la licencia`, "Cerrar", {
                 duration: 3000,
                 panelClass: ['warn-snackbar']
@@ -62,20 +70,22 @@ export class LoginComponent implements OnInit {
               this.validarCredencialesDelUsuario();
             }
           } else {
-            this.showSpinner = false;
             this.snackBar.open(`Su licencia se encuentra vencida. Contactar a su proveedor`, "Cerrar", {
               duration: 3000,
               panelClass: ['error-snackbar']
             });
+
+            this.showSpinner = false;
           }
         },
         error: (err) => {
           if (err.status === 404){
-            this.showSpinner = false;
             this.snackBar.open('La empresa seleccionada es inexistente o no tiene accesibilidad remota', "Cerrar", {
               duration: 3000,
               panelClass: ['error-snackbar']
             });
+
+            this.showSpinner = false;
           } else {
             console.error(`HTTP ERROR - [CODE: ${err.status}], [MESSAGE: ${err.statusText}]`);
           }
@@ -97,12 +107,12 @@ export class LoginComponent implements OnInit {
             duration: 3000,
             panelClass: ['error-snackbar']
           })
+
+          this.showSpinner = false;
         } else {
           console.error(`HTTP ERROR - [CODE: ${err.status}], [MESSAGE: ${err.statusText}]`);
         }
       }
-    }).add(() => {
-      this.showSpinner = false;
     })
   }
 }

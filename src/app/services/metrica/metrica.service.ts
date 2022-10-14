@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Metrica } from 'src/app/models/metrica.model';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { filter } from 'd3';
 import { environment } from 'src/environments/environment';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +12,7 @@ export class MetricaService {
 
   constructor(private http: HttpClient) { }
 
-  obtenerMetricas(filtersValues: {[key: string]: string | number | boolean}): Observable<Array<Metrica>> {
+  obtenerMetricas(filtersValues: {[key: string]: string | number | boolean}): Observable<Array<any>> {
     const aliasCnnString = localStorage.getItem('aliasCnnString');
     const url = `${this.metricaApiUrl}/getMetrics`
     const httpOptions = {
@@ -26,11 +25,13 @@ export class MetricaService {
       connectionString: aliasCnnString,
       filtersValues: filtersValues
     }
-    
-    return this.http.post<Array<Metrica>>(
+
+    return this.http.post<any>(
       url,
       JSON.stringify(body),
-      httpOptions)
+      httpOptions).pipe(map(data => { 
+        return data
+      }))
   }
 
 }

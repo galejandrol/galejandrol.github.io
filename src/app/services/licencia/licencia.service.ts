@@ -1,6 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-
 import { Observable } from 'rxjs';
 import { Licencia } from 'src/app/models/licencia.model';
 import { environment } from 'src/environments/environment';
@@ -13,8 +12,8 @@ export class LicenciaService {
 
   constructor(private http: HttpClient) {}
 
-  obtenerTodosLosAlias(): Observable<string[]>{
-    return this.http.get<string[]>(this.aliasApiURL);
+  obtenerTodosLosAlias(): Observable<Array<string>>{
+    return this.http.get<Array<string>>(this.aliasApiURL);
   }
 
   validarAlias(alias: string): Observable<Licencia>{

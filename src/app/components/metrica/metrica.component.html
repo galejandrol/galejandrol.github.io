@@ -1,5 +1,5 @@
-<div *ngIf="showSpinner" style="display: flex; flex-direction: column; align-items: center; height: 100%; justify-content: center;">
-    <mat-spinner  style="margin-top:20px;" [diameter]="50"></mat-spinner>
+<div *ngIf="showSpinner" id="spinnerContainer">
+    <mat-spinner style="margin-top:20px;" [diameter]="50"></mat-spinner>
 </div>
 <div [ngClass]="showSpinner ? 'hideFiltersAndMetrics' : 'showFiltersAndMetrics'">
     <mat-toolbar class="toolbar">
