@@ -62,7 +62,7 @@ export class MetricaComponent implements OnInit {
     "04": {
       "name": "RazonSocial",
       "value": "Cantidad",
-      "xAxisLabel": "Razon Socia",
+      "xAxisLabel": "Razon Social",
       "yAxisLabel": "Cantidad"
     }
   }
