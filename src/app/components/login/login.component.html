@@ -10,11 +10,14 @@
     </mat-form-field>
     <mat-form-field appearance="fill">
       <mat-label>Contraseña</mat-label>
-      <input matInput type="password" [(ngModel)]=password name="password" required>
+      <input matInput [type]="hide ? 'password' : 'text'" [(ngModel)]=password name="password" required>
+      <button type="button" mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+        <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+      </button>
     </mat-form-field>
-    <button [disabled]="showSpinner" mat-raised-button color="accent" (click)="login()" style="background-color: #8bc541; width: 100%;">Ingresar</button>
+    <button type="submit" id="botonIngresar" [disabled]="showSpinner" mat-raised-button color="accent" (click)="login()">Ingresar</button>
   </form>
-  <div style="display: flex; flex-direction: column; align-items: center;">
+  <div id="spinnerContainer">
     <mat-spinner *ngIf="showSpinner" style="margin-top:20px;" [diameter]="50"></mat-spinner>
   </div>
 </div>

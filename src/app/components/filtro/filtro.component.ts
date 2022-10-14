@@ -19,8 +19,10 @@ export class FiltroComponent implements OnInit {
 
   @Input() metricId: string = '';
   @Output() showSpinner = new EventEmitter<boolean>();
-  @Output() sendMetricas = new EventEmitter<Array<any>>();
+  @Output() sendMetricas = new EventEmitter<Array<{[key: string]: string | number}>>();
   mostrarFiltroFechaPersonalizada: boolean = false;
+
+  // Variable para manejar el expandir/colapsar del panel de los filtros.
   openPanelState = false;
 
   range = new FormGroup({
@@ -28,7 +30,7 @@ export class FiltroComponent implements OnInit {
     fechaHasta: new FormControl<Date | null>(null),
   });
 
-  filtros: Array<Filtro> = [];
+  public filtros: Array<Filtro> = [];
 
   private dateFilter: Filtro = {
     label: "Fecha",
@@ -54,24 +56,29 @@ export class FiltroComponent implements OnInit {
     ]
   }
 
-  filtersHtmlId: {[key: string]: any} = {
+  // Esta estructura es para 
+  public filtersHtmlId: {[key: string]: any} = {
     "GradosOperativos": "gradoOperativoId",
     "RubrosClientes": "rubroId",
     "ZonasGeograficas": "zonaGeograficaId",
     "rangoDeFechas": "rangoDeFechas",
   }
 
-  dateFilterValues: {[key: string]: any} = {
+  private dateFilterValues: {[key: string]: any} = {
     "0": `${this.getDateByDaysAgo(0)}-${this.getDateByDaysAgo(0)}`,
     "7": `${this.getDateByDaysAgo(7)}-${this.getDateByDaysAgo(0)}`,
     "30": `${this.getDateByDaysAgo(30)}-${this.getDateByDaysAgo(0)}`,
     "PERSONALIZADA": "PERSONALIZADA",
   }
 
-  filtrosAplicados: Array<{[key: string]: string}> = [];
-  filtrosAplicadosTemporal: Array<{[key: string]: string}> = [];
+  // Array que contiene los filtros que finalmente se encuentran aplicados.
+  public filtrosAplicados: Array<{[key: string]: string}> = [];
 
-  filtrosSeleccionados = new Map<string, string | number | boolean>([
+  // Array que contiene los filtros que se van modificando antes de aplicarse.
+  private filtrosAplicadosTemporal: Array<{[key: string]: string}> = [];
+
+  // Seteo los valores por default para cada uno de los filtros
+  private filtrosSeleccionados = new Map<string, string | number | boolean>([
     ["clienteId", 0],
     ["rubroId", 0],
     ["zonaGeograficaId", 0],
@@ -91,12 +98,18 @@ export class FiltroComponent implements OnInit {
     this.filtroService.obtenerOpcionesDeFiltros()
     .subscribe({
       next: (filtrosOpcionesArray) => {
+        // Obtengo los filtros de la API (Shaman Metrics)
         this.filtros = filtrosOpcionesArray;
+
+        // Le agrego el filtro custom de rango de Fechas
         this.filtros.push(this.dateFilter);
 
+        // Hago la llamada inicial de las métricas
         this.metricaService.obtenerMetricas(Object.fromEntries(this.filtrosSeleccionados))
         .subscribe({
           next: (metricas) => {
+
+            // Le envio las métricas al componente Metrica para actualizar.
             this.sendMetricas.emit(metricas);
           },
           error: (err) => {
@@ -109,30 +122,27 @@ export class FiltroComponent implements OnInit {
       }
     })
 
+    // Agrego el ID de la métrica al map de filtrosSeleccionados para que esté presente en el body usado en el call a la API para obtener las metricas.
     this.filtrosSeleccionados.set('metricId', this.metricId);
   }
 
-  aplicarFiltro(): void {
-    this.showSpinner.emit(true);
-    if (this.mostrarFiltroFechaPersonalizada) {
-      if (this.validDatePickerRangeValues()) {
-        let rangoDeFechas = `${this.range.controls.fechaDesde.value!.toLocaleDateString()}-${this.range.controls.fechaHasta.value!.toLocaleDateString()}`;
-        this.openPanelState = false;
-        this.filtrosSeleccionados.set('rangoDeFechas', rangoDeFechas);
-        this.metricaService.obtenerMetricas(Object.fromEntries(this.filtrosSeleccionados))
-        .subscribe({
-          next: (metricas) => {
-            this.sendMetricas.emit(metricas);
-          },
-          error: (err) => {
-            console.error(`HTTP ERROR - [CODE: ${err.status}], [MESSAGE: ${err.statusText}]`);
-          }
-        });
+  aplicarFiltro(): void {  
+    let rangoDeFechas: string = '';
 
-        this.filtrosAplicados = Object.assign([], this.filtrosAplicadosTemporal);
-      }
-    } else {
+    // Realizo el call a la API sólo si:
+      // - El filtro de fecha no está seteado en PERSONALIZADA ó
+      // - El filtro de fecha está seteado en PERSONALIZADA y contiene un rango de fechas válido.
+    if (!this.mostrarFiltroFechaPersonalizada || (this.mostrarFiltroFechaPersonalizada && this.validDatePickerRangeValues())){
+
+      this.showSpinner.emit(true);
       this.openPanelState = false;
+
+      // Si el caso es que el filtro de fecha está seteado en PERSONALIZADA y contiene un rango de fechas válido lo agrego a los filtros seleccionados.
+      if (this.mostrarFiltroFechaPersonalizada && this.validDatePickerRangeValues()) {
+        rangoDeFechas = `${this.range.controls.fechaDesde.value!.toLocaleDateString()}-${this.range.controls.fechaHasta.value!.toLocaleDateString()}`;
+        this.filtrosSeleccionados.set('rangoDeFechas', rangoDeFechas);
+      }
+      
       this.metricaService.obtenerMetricas(Object.fromEntries(this.filtrosSeleccionados))
       .subscribe({
         next: (metricas) => {
@@ -142,18 +152,29 @@ export class FiltroComponent implements OnInit {
           console.error(`HTTP ERROR - [CODE: ${err.status}], [MESSAGE: ${err.statusText}]`);
         }
       });
-
-      this.filtrosAplicados = Object.assign([], this.filtrosAplicadosTemporal);
+  
+      this.filtrosAplicados = this.filtrosAplicadosTemporal;
     }
-
-    
   }
 
+  // Metodo que maneja el onSelect de los filtros
   select(event: any){
     let htmlElementId = event.source.id;
+
+    // Si el event.value es undefined significa que se trata de un checkbox
+
+    // Si el event.value está definido chequeo lo siguiente:
+      // Si se trata del filtro rangoDeFechas obtengo el rango de fechas en base a los values posibles del combo (ej: HOY, SEMANA, MES etc.).
+      // Si no se trata del filtro rangoDeFechas obtengo el value de la opción del filtro seleccionada.
     let value = (typeof event.value === 'undefined') ? (event.checked ? true : false) : (htmlElementId === 'rangoDeFechas' ? this.dateFilterValues[event.value] : event.value);
+
+
+    // Si el event.source.selected es undefined significa que se trata de un checkbox
+
+    // Si el event.value está definido obtengo el normal viewValue de la opción del filtro seleccionada.
     let viewValue = (typeof event.source.selected === 'undefined') ? (value ? "SI" : "NO") : event.source.selected.viewValue;
 
+    // Muestro u oculto los inputs de rango de fechas personalizadas según el value seleccionado por el usuario.
     if (htmlElementId === 'rangoDeFechas') {
       if (value === 'PERSONALIZADA') {
         this.mostrarFiltroFechaPersonalizada = true;
@@ -164,8 +185,10 @@ export class FiltroComponent implements OnInit {
       }
     }
 
+    // Sobrescribo las opciones default de los filtros.
     this.filtrosSeleccionados.set(htmlElementId, value);
 
+    // Chequeo si el array de filtros aplicados ya tiene este filtro aplicado con otra opción.
     let index = this.filtrosAplicadosTemporal.findIndex((element) => element['id'] == htmlElementId);
 
     let filtroAplicado = {
@@ -174,6 +197,7 @@ export class FiltroComponent implements OnInit {
       "viewValue": viewValue
     }
 
+    // Si ya existe un filtro aplicado con otra opción, lo sobrescribo sino lo agrego.
     if (index != -1 ){
       this.filtrosAplicadosTemporal[index] = filtroAplicado;
     } else {
@@ -222,11 +246,14 @@ export class FiltroComponent implements OnInit {
     this.aplicarFiltro();
   }
 
+  // Funcion helper para obtener una fecha partiendo del día de hoy y restandole los días indicados como parámetro.
   private getDateByDaysAgo(days: number): string {
     const now = new Date();
     return this.formatDate(new Date(now.getTime() - days * 24 * 60 * 60 * 1000));
   }
 
+
+  // Funcion para chequear que el rango de fechas del filtro fecha seteado en PERSONALIZADA sea válido.
   private validDatePickerRangeValues(): boolean {
     return (
       this.range.controls.fechaDesde.valid &&
@@ -236,10 +263,13 @@ export class FiltroComponent implements OnInit {
     );
   }
 
+  // Funcion helper para agregarle un 0 si los días o meses tienen 1 dígito.
   private padTo2Digits(num: number) {
     return num.toString().padStart(2, '0');
   }
   
+
+  // Funcion helper para formatear la fecha en formato dd/mm/yyyy
   private formatDate(date: Date) {
     return [
       this.padTo2Digits(date.getDate()),

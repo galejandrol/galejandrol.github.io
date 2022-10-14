@@ -48,12 +48,6 @@ export class HomeComponent implements OnInit {
 
   mostrarMetricaDelModulo(codigo: string){
     this.router.navigateByUrl(`/modulos/${codigo}`)
-/*     let modulosListDiv = document.getElementById('modulosList') as HTMLDivElement;
-    let metricaModuloDiv = document.getElementById('metricaModulo') as HTMLDivElement;
-    modulosListDiv.style.display = 'none';
-    metricaModuloDiv.style.display = 'block';
-    console.log(codigo)
-    this.metricaSeleccionada = codigo; */
   }
   
   cerrarSesion(){

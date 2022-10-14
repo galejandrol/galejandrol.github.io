@@ -1,6 +1,6 @@
 {
-  "name": "Shaman-Metrics-PWA",
-  "short_name": "Shaman-Metrics-PWA",
+  "name": "Shaman Metrics",
+  "short_name": "Shaman Metrics",
   "theme_color": "#1976d2",
   "background_color": "#fafafa",
   "display": "standalone",

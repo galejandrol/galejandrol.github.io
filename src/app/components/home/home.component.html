@@ -1,9 +1,9 @@
-<div class="example-container">
+<div class="container">
   <mat-toolbar class="toolbar">
     <span>SHAMAN METRICS APP</span>
     <div class="spacer"></div>
     <p>{{ usuarioNombreCompleto }}</p>
-    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Menú del usuario">
       <mat-icon>more_vert</mat-icon>
       </button>
       <mat-menu #menu="matMenu">
@@ -13,7 +13,7 @@
           </button>
       </mat-menu>
   </mat-toolbar>
-  <div *ngIf="showSpinner" style="display: flex; flex-direction: column; align-items: center; height: 100%; justify-content: center;">
+  <div *ngIf="showSpinner" id="spinnerContainer">
     <mat-spinner  style="margin-top:20px;" [diameter]="50"></mat-spinner>
   </div>
   <div id="modulosList" *ngIf="!showSpinner">
