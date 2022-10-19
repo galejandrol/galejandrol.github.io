@@ -24,7 +24,6 @@ export class MetricaComponent implements OnInit {
   };
 
   // Opciones del gráfico de barra.
-  view: [number, number] = [0,0];
   showXAxis = true;
   showYAxis = true;
   gradient = false;
@@ -77,19 +76,12 @@ export class MetricaComponent implements OnInit {
   }
 
   constructor(private router: Router, private activatedRoute: ActivatedRoute) {
-    // Seteo el ancho del grafico de barra con el 70% del ancho de la pantalla y un alto de 400px.
-    this.view = [innerWidth / 1.3, 400];
   }
 
   ngOnInit(): void {
     this.routeSub = this.activatedRoute.params.subscribe(params => {
       this.metricId = params['id'];
     });
-  }
-
-  onResize(event: any) {
-    // Mantengo el gráfico de barra con un ancho del 70% del ancho de la pantalla y un alto de 400px.
-    this.view = [event.target.innerWidth / 1.3, 400];
   }
 
   actualizarMetricas(metricas: Array<{[key: string]: string | number}>) {
