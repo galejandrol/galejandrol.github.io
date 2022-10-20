@@ -10,7 +10,7 @@ export class AppComponent {
   title = 'Shaman-Metrics-PWA';
 
   constructor(private sw: UpdateService) {
-    // check the service worker for updates
+    // Uso el servicio del SW para chequear nuevas versiones de la app.
     this.sw.checkForUpdates();
   }
 }
