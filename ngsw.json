@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1666673037118,
+  "timestamp": 1666752520854,
   "index": "/index.html",
   "assetGroups": [
     {
@@ -13,7 +13,7 @@
       "urls": [
         "/favicon.ico",
         "/index.html",
-        "/main.18a85726a3f6713f.js",
+        "/main.8edeef9301f8428e.js",
         "/manifest.webmanifest",
         "/polyfills.9ce09717b6e6a8fa.js",
         "/runtime.8da920f6d9b01408.js",
@@ -43,8 +43,7 @@
         "/assets/img/03.png",
         "/assets/img/fondo_login_desktop.jpg",
         "/assets/img/fondo_login_mobile.jpg",
-        "/assets/login.png",
-        "/fondo_login_desktop.6f2e568e3831329c.jpg",
+        "/fondo_login_desktop.3902c61959533964.jpg",
         "/fondo_login_mobile.ac3528c38beda614.jpg"
       ],
       "patterns": []
@@ -64,14 +63,13 @@
     "/assets/img/01.png": "f964ade74577b04ecf3525b3a0264e9a937d5a37",
     "/assets/img/02.png": "70c2c27a7759eca5ef6315452323a9badc5b5f0d",
     "/assets/img/03.png": "dfb6f9868d6258bc5921dc808f50069df074df78",
-    "/assets/img/fondo_login_desktop.jpg": "ad9b37dd3d73ae592fc3c9a65b9bbeeefa7b68d5",
+    "/assets/img/fondo_login_desktop.jpg": "414b7198791c5578bb4bc0d707bafee5da222d1a",
     "/assets/img/fondo_login_mobile.jpg": "8864396f1251bec9a7947cb77cf86ae0e3b40963",
-    "/assets/login.png": "5b8fb1d4dccfbd8880d86007516dba330f4823fe",
     "/favicon.ico": "9748abd18a10541a26683c86087adcea25578b37",
-    "/fondo_login_desktop.6f2e568e3831329c.jpg": "ad9b37dd3d73ae592fc3c9a65b9bbeeefa7b68d5",
+    "/fondo_login_desktop.3902c61959533964.jpg": "414b7198791c5578bb4bc0d707bafee5da222d1a",
     "/fondo_login_mobile.ac3528c38beda614.jpg": "8864396f1251bec9a7947cb77cf86ae0e3b40963",
-    "/index.html": "82b1fa599c48e411b0817c8257cd81ef68955f65",
-    "/main.18a85726a3f6713f.js": "62246373e64cb94600d37cc169c8c478e0136c15",
+    "/index.html": "8efb6e27ae6737b7ee2a453395521ed249c95ea3",
+    "/main.8edeef9301f8428e.js": "33c7ccc1df25238552500fe6cca7377e41475deb",
     "/manifest.webmanifest": "07c0dc81e8a12bf4049d786650afc3108c4e1895",
     "/polyfills.9ce09717b6e6a8fa.js": "0a7e193581b7d1b5103e74dc62c8d85ac97414d1",
     "/runtime.8da920f6d9b01408.js": "596329b573c6392f297b236673bc9118dd126e5c",
